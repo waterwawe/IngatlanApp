@@ -1,0 +1,189 @@
+.App {
+  display:block;
+  text-align: center;
+  justify-content: center;
+}
+
+body, html {
+  height: 100%;
+  background: rgb(237,230,202);
+  background: linear-gradient(90deg, rgba(237,230,202,1) 0%, rgba(195,161,66,1) 100%);
+}
+
+.ingatlan-manage-list{
+  display: flex;
+  justify-content: space-evenly;
+  margin:10px;
+  flex-wrap: wrap;
+} 
+
+.ingatlan-list{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin:10px;
+  flex-direction: column;
+} 
+
+.ingatlan-slider-container{
+  display: flex;
+  justify-content: center;
+}
+
+.ingatlan-detail-card{
+  display:flex;
+  justify-content: center;
+}
+
+.review-body{
+  display:flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ingatlan-slider{
+  display:flex;
+  justify-content: center;
+  margin: 5px;
+  width: fit-content;
+  height: fit-content;
+}
+
+.ingatlan-list-card{
+  display:flex;
+  margin:20px;
+  justify-content: flex-start;
+}
+
+.manage-list-card{
+  display:flex;
+  margin:20px;
+  justify-content: flex-start;
+  height: fit-content;
+  width: 17rem;
+}
+
+.ingatlan-list-card-image{
+  height: 12rem;
+  width: 14rem;
+  object-fit: cover;
+}
+
+.search-form{
+  margin:10px;
+  display:flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.search-from-card{
+  margin:10px;
+  padding:15px;
+  display:flex;
+  justify-content: center;
+}
+
+.ingatlan-list-button{
+  margin: 5px;
+  padding: 5px;
+}
+
+.ingatlan-item{
+  display:flex;
+  margin:10px;
+  justify-content: space-between;
+}
+
+.review-bar{
+  margin:10px;
+}
+
+.detail-image-big-carousel{
+  display:flex;
+  justify-content: center;
+  height: 95%;
+  width: 95%;
+}
+
+.message-card{
+  margin: 5px;
+  display:flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.detail-image-carousel{
+  display:flex;
+  height: 17rem;
+}
+
+.carousel-control-next,
+.carousel-control-prev {
+    filter: invert(65%);
+}
+
+.detail-image{
+  height: 17rem;
+  width: 30rem;
+  object-fit: cover;
+}
+
+.search-from-element{
+  margin: 5px;
+  padding: 5px;
+}
+
+.messages-container{
+  display:flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.edit-list{
+  padding:5px;
+}
+
+
+.edit-list-item{
+  margin: 5px;
+  padding:5px;
+}
+
+.edit-image{
+  padding:5px;
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+}
+
+.edit-images{
+  display:flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.edit-map{
+  height: 30rem;
+  width: 30rem;
+}
+
+.upload-image{
+  display:flex;
+  justify-content: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
