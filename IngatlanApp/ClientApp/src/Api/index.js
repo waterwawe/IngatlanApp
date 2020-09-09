@@ -36,7 +36,7 @@ export const Streettypes = (value) => {
         case 2:
             return "square"
         case 3:
-            return "út"
+            return "road"
         default:
           return "Unkown"
       }

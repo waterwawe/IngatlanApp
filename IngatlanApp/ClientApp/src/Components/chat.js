@@ -68,9 +68,9 @@ export default function Chat({ otherUser }) {
                     </Card.Title>
                     <Card.Body>
                         <Form onSubmit={send}>
-                            <Row>
+                            <Row className="ml-3">
                                 <Form.Control as="textarea" rows="2" placeholder="Enter message here" value={message} onChange={e=>{ setMessage(e.target.value)}} />
-                                <Button variant="primary" type="submit" disabled={isLoading}>
+                                <Button className="mt-2" variant="primary" type="submit" disabled={isLoading}>
                                     {isLoading ? <><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</> : <>Submit</>}
                                 </Button>
                             </Row>
@@ -79,8 +79,8 @@ export default function Chat({ otherUser }) {
                 </Card>
                 {messages.map((message) => {
                     return (
-                        <Card key={message.id} className="message-card">
-                            <Card.Title>
+                        <Card key={message.id} className="message-card text-left">
+                            <Card.Title className="ml-3">
                                 {message.fromUsername} sent message to {message.toUserName}
                             </Card.Title>
                             <Card.Body>

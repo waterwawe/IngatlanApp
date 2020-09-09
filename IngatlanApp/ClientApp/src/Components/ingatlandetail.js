@@ -96,7 +96,7 @@ export default function Details({ match }) {
   useEffect(() => {
     getUser();
     getDetails();
-  }, [])
+  }, [match.params.id])
 
   return (
     <>

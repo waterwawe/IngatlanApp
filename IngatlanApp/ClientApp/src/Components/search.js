@@ -145,7 +145,6 @@ export default function Search() {
       <Card className="col-md-11 col-lg-9" bg="light" variant="light">
         <Card bg="light" variant="light">
           <ListGroup horizontal className="search-form">
-            <Row></Row>
             <ListGroup.Item className="search-from-element col-sm-11 col-md-5 col-lg-4 col-xl-3">
               <Form.Group>
                 <Form.Label>Select City</Form.Label>

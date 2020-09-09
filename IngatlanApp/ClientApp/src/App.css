@@ -107,8 +107,6 @@ body, html {
 
 .message-card{
   margin: 5px;
-  display:flex;
-  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
