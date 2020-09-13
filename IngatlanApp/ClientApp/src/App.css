@@ -17,6 +17,10 @@ body, html {
   flex-wrap: wrap;
 } 
 
+.brand-logo{
+  height: 3rem;
+}
+
 .ingatlan-list{
   display: flex;
   justify-content: space-evenly;
