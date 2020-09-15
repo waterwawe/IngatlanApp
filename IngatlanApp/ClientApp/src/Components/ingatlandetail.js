@@ -122,9 +122,9 @@ export default function Details({ match }) {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Container className="justify-content-center col-sm-11 col-md-10 col-lg-8">
+      <Container className="mt-2 text-center col-sm-11 col-md-10 col-lg-8">
         <Card className="ingatlan-detail-card" bg="light">
-          <Card.Body>
+          <Card.Body className="text-center">
             <Card.Title>{details.title}</Card.Title>
             <Carousel className="detail-image-carousel col-sm-11 col-md-10 col-lg-8">
               {details.images ? images.map((img) => {

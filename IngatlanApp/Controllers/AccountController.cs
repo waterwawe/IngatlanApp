@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IngatlanApi.Controllers
 {
+    /// <summary>
+    /// Felhasználói profilok kezelése
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase {
@@ -24,6 +27,11 @@ namespace IngatlanApi.Controllers
             _signInManager = signManager;
         }
 
+        /// <summary>
+        /// Bejelentkezés
+        /// </summary>
+        /// <param name="user">Bejelentkezési adatok</param>
+        /// <returns>200 OK vagy 400 Bad Request</returns>
         [Route("/[controller]/login")]
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginDTO user) {
@@ -41,6 +49,10 @@ namespace IngatlanApi.Controllers
                 return BadRequest();
         }
 
+        /// <summary>
+        /// Bejelentkezés állapotának lekérdezése
+        /// </summary>
+        /// <returns>Adott felhasználó be van-e jelentkezve (bool), amennyiben igen, akkor a felhasználónevét is elküldjük</returns>
         [Route("/[controller]/isloggedin")]
         [HttpGet]
         public ActionResult<LoggedStatusDTO> GetLoggedIn() {
@@ -51,6 +63,10 @@ namespace IngatlanApi.Controllers
             return Ok(status);
         }
 
+        /// <summary>
+        /// Kijelentkezés
+        /// </summary>
+        /// <returns>200 OK</returns>
         [Route("/[controller]/logout")]
         [Authorize]
         [HttpGet]
@@ -59,6 +75,10 @@ namespace IngatlanApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Profil adatok lekérdezése
+        /// </summary>
+        /// <returns>Email cím, felhasználónév, teljes név</returns>
         [Route("/[controller]/profile")]
         [Authorize]
         [HttpGet]
@@ -74,6 +94,11 @@ namespace IngatlanApi.Controllers
             return Ok(dto);
         }
 
+        /// <summary>
+        /// Egy adott felhasználónév profil adatainak lekérdezése
+        /// </summary>
+        /// <param name="username">Felhasználónév</param>
+        /// <returns>Email cím, felhasználónév, teljes név 200 OK vagy 404 Not found</returns>
         [Route("/[controller]/profile/{username}")]
         [HttpGet]
         public async Task<ActionResult<ApplicationUser>> GetProfile(string username) {
@@ -91,6 +116,11 @@ namespace IngatlanApi.Controllers
                 return NotFound();
         }
 
+        /// <summary>
+        /// Regisztráció
+        /// </summary>
+        /// <param name="newUser">Felhasználó adatok</param>
+        /// <returns>200 OK vagy 400 Bad request</returns>
         [Route("/[controller]/register")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDTO newUser) {

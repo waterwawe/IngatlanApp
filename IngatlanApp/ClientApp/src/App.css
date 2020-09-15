@@ -115,7 +115,7 @@ body, html {
 }
 
 .detail-image-carousel{
-  display:flex;
+  align-self: center;
   height: 17rem;
 }
 
@@ -127,6 +127,7 @@ body, html {
 .detail-image{
   height: 17rem;
   width: 30rem;
+  text-align: center;
   object-fit: cover;
 }
 

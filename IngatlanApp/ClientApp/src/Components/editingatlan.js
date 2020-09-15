@@ -349,7 +349,7 @@ export default function Edit({ match }) {
               </Row>
             </Card.Body>
           </Card>
-          <Card className="ingatlan-detail-card">
+          <Card className="ingatlan-detail-card mt-2 mb-2">
             <Card.Body>
               <ListGroup className="edit-list">
                 {details.title ?

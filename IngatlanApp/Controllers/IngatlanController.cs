@@ -13,6 +13,9 @@ using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 
 namespace IngatlanApi.Controllers {
+    /// <summary>
+    /// Ingatlonok kezelése (CRUD)
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class IngatlanController : ControllerBase {
@@ -29,6 +32,18 @@ namespace IngatlanApi.Controllers {
             _accessor = accessor;
         }
 
+        /// <summary>
+        /// Ingatlanok lekérdezésére szolgál, a megadott szűrők alapján. Ha egy paramtér null, akkor nem történik szűrés az adott paraméter alapján.
+        /// </summary>
+        /// <param name="priceFrom">Ennél az értéknél olcsóbb ingatlanok szűrve lesznek.</param>
+        /// <param name="priceTo">Ennél az értéknél drágább ingatlanok szűrve lesznek.</param>
+        /// <param name="ingatlanType">Adott típusú ingatlanok listázása, több is megadható tömbként</param>
+        /// <param name="city">Csak egy bizonyos városban lévő ingatlanok listázása</param>
+        /// <param name="district">Csak egy bizonyos kerületben lévő ingatlanok listázása</param>
+        /// <param name="streetname">Csak egy bizonyos utcában lévő ingatlanok listázása</param>
+        /// <param name="owner">Csak egy hirdető által feladott ingatlanok listázása</param>
+        /// <param name="descriptioncontains">Szerepeljen a megadott szöveg a leírásban</param>
+        /// <returns>Keresési feltételeknek megfelő ingatlanok listája</returns>
         [Route("/api/[controller]")]
         [HttpGet]
         public ActionResult<List<Ingatlan>> Get(
@@ -56,18 +71,32 @@ namespace IngatlanApi.Controllers {
             return Ok(_ingatlanService.Get(queryDTO).Result);
         }
 
+        /// <summary>
+        /// Városok listájának lekérdezése
+        /// </summary>
+        /// <returns>Városok listája</returns>
         [Route("/api/[controller]/cities")]
         [HttpGet]
         public ActionResult<List<string>> GetAddresses() {
             return Ok(_ingatlanService.GetCites());
         }
 
+        /// <summary>
+        /// Kerületek listájának lekérdezése
+        /// </summary>
+        /// <returns>Kerületek listájának lekérdezése</returns>
         [Route("/api/[controller]/districts")]
         [HttpGet]
         public ActionResult<List<int>> GetDistricts() {
             return Ok(_ingatlanService.GetDistricts());
         }
 
+        /// <summary>
+        /// Képek feltöltése egy ingatlan hirdetéshez.
+        /// </summary>
+        /// <param name="id">Az ingatlan azonosítója</param>
+        /// <param name="file">A kép fájl</param>
+        /// <returns>Az ingatlan a feltöltött képpel hivatkozva</returns>
         [Authorize]
         [HttpPost("{id:length(24)}")]
         public async Task<ActionResult<string>> Upload(string id,IFormFile file) {
@@ -110,6 +139,12 @@ namespace IngatlanApi.Controllers {
             return Ok(ingatlan);
        }
 
+        /// <summary>
+        /// Egy adott kép törlése az ingatlan hirdetéséből
+        /// </summary>
+        /// <param name="id">Az ingatlan azonosítója</param>
+        /// <param name="name">A kép fájl neve</param>
+        /// <returns>Ha sikeres a törlés 200 OK, ha nem található a kép, vagy az ingatlan akkor 404.</returns>
         [Route("/api/[controller]/image")]
         [Authorize]
         [HttpDelete]
@@ -137,6 +172,11 @@ namespace IngatlanApi.Controllers {
             return NotFound("Image not found");
         }
 
+        /// <summary>
+        /// Ingatlan lekérdezése azonosító alapján
+        /// </summary>
+        /// <param name="id">Az ingatlan azonosítója (24 karakter)</param>
+        /// <returns>A kért ingatlan (200 OK) vagy 404 (Not Found)</returns>
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Ingatlan>> Get(string id) {
             var ingatlan = _ingatlanService.Get(id).Result;
@@ -155,7 +195,12 @@ namespace IngatlanApi.Controllers {
 
             return ingatlan;
         }
-
+        
+        /// <summary>
+        /// Az ingatlan megtekintések számának lekérdezése
+        /// </summary>
+        /// <param name="id">Az ingatlan azonosítója</param>
+        /// <returns>200 OK - Az ingatlan megetkintéseinek száma, 400 Not Found vagy 401 Unauthorized</returns>
         [Route("/api/[controller]/viewcount")]
         [Authorize]
         [HttpGet]
@@ -176,6 +221,11 @@ namespace IngatlanApi.Controllers {
             return Ok(new { views = viewList.ViewedByUsernameList.Count });
         }
 
+        /// <summary>
+        /// Új ingatlan hozzáadása
+        /// </summary>
+        /// <param name="ingatlan">Az ingatlan JSON objektum</param>
+        /// <returns>A létrehozott ingatlan azonosítóval</returns>
         [HttpPost]
         [Authorize]
         public ActionResult<Ingatlan> Create(Ingatlan ingatlan) {
@@ -193,6 +243,12 @@ namespace IngatlanApi.Controllers {
             return ingatlan;
         }
 
+        /// <summary>
+        /// Már létező ingatlan szerkesztése, felülírása
+        /// </summary>
+        /// <param name="id">Az ingatlan azonosítója</param>
+        /// <param name="ingatlanIn">A módosított ingatlan (azonosító nem módosítható)</param>
+        /// <returns>204 No content</returns>
         [HttpPut("{id:length(24)}")]
         [Authorize]
         public IActionResult Update(string id, Ingatlan ingatlanIn) {
@@ -225,8 +281,13 @@ namespace IngatlanApi.Controllers {
             return NoContent();
         }
 
+        /// <summary>
+        /// Ingatlan törlése
+        /// </summary>
+        /// <param name="id">Az ingatlan azonosítója</param>
+        /// <returns>A törölt ingatlan 200 OK, 404 Not found, vagy 401 Unathorized</returns>
         [Route("api/[controller]/{id:length(24)}")]
-        [HttpDelete("{id:length(24)}")]
+        [HttpDelete]
         [Authorize]
         public ActionResult<Ingatlan> Delete(string id) {
             var ingatlan = _ingatlanService.Get(id).Result;

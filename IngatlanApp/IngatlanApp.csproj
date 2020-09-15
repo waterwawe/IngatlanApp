@@ -9,11 +9,18 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\Git\IngatlanApp\IngatlanApp\IngatlanApp\IngatlanApp.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="2.1.1" />
     <PackageReference Include="DataAnnotationsExtensions" Version="5.0.1.27" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.7" />
     <PackageReference Include="MongoDB.Driver" Version="2.11.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.5.1" />
   </ItemGroup>
 
   <ItemGroup>

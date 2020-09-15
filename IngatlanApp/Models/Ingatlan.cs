@@ -11,30 +11,63 @@ namespace IngatlanApi.Models {
     public enum IngatlanType {Undefined, DetachedHouse, SemiDeatchedHouse, Apartment, Penthouse, Farm}
 
     public class Ingatlan {
+
+        /// <summary>
+        /// Ingatlan azonosítója
+        /// </summary>
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        /// <summary>
+        /// Hirdetés címe
+        /// </summary>
         [BsonRequired]
         public string Title { get; set; }
 
+
+        /// <summary>
+        /// Ingatlan (földrajzi) címe
+        /// </summary>
         [BsonRequired]
         public Address Address { get; set; }
 
+
+        /// <summary>
+        /// Ingatlan ára
+        /// </summary>
         [BsonRequired]
         public double? Price { get; set; }
 
+        /// <summary>
+        /// Ingatlan típusa 1-Családi ház 2-Ikerház 3-Lakás 4-Penthouse 5-Farm
+        /// </summary>
         [BsonRequired]
         public IngatlanType IngatlanType { get; set; }
 
+        /// <summary>
+        /// Hirdető felhasználóneve
+        /// </summary>
         public string OwnerUsername { get; set; }
 
+        /// <summary>
+        /// Hirdető felhasználóneve kisbetűvel
+        /// </summary>
         public string NormalizedOwnerUsername { get; set; }
 
+        /// <summary>
+        /// Létrehozás dátuma
+        /// </summary>
         public DateTime CreatedAt { get; set; }
 
+        /// <summary>
+        /// Képek listája (csak a képek fájlnevei)
+        /// </summary>
         public List<string> Images{ get; set;}
 
+        /// <summary>
+        /// Hirdetés leírása
+        /// </summary>
         [BsonRequired]
         public string Description { get; set; }
     }

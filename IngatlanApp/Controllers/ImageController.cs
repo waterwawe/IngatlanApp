@@ -9,6 +9,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace IngatlanApi.Controllers
 {
+    /// <summary>
+    /// Az ingatlanokhoz feltöltött képek kezelése
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ImageController : ControllerBase
@@ -19,6 +22,11 @@ namespace IngatlanApi.Controllers
             _environment = env;
         }
 
+        /// <summary>
+        /// Egy kép lekérdezése
+        /// </summary>
+        /// <param name="name">A kép neve (fájlnév)</param>
+        /// <returns>A kép mint file 200 OK vagy 404 Not Found</returns>
         [HttpGet("{name}", Name = "Get")]
         public IActionResult Get(string name) {
             var imagePath = @"\Upload\Images\";

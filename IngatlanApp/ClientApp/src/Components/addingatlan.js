@@ -118,7 +118,7 @@ export default function AddIngatlan({ isLoggedIn }) {
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <Form.Label>Your desired price</Form.Label>
-                                    <Row><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="0.1" placeholder="XX.XX" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} /> M. Ft.</Row>
+                                    <Row><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="0.1" placeholder="XX.XX" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} /> M. Ft.</Row>
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <Form.Label>Your estate's type</Form.Label>

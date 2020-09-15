@@ -11,7 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using System;
+using System.Linq;
+using System.IO;
 
 namespace IngatlanApp
 {
@@ -64,6 +67,16 @@ namespace IngatlanApp
             services.AddSingleton<ViewService>();
             services.AddSingleton<MessageService>();
 
+            services.AddMvc();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealSTATE Api", Version = "v1" });
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "IngatlanApp.xml");
+                c.IncludeXmlComments(filePath);
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+            });
+
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
@@ -92,6 +105,8 @@ namespace IngatlanApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSwagger();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
@@ -101,6 +116,11 @@ namespace IngatlanApp
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
 
             app.UseSpa(spa =>

@@ -10,20 +10,45 @@ namespace IngatlanApi.Models {
     public enum StreetType { undefined, street, square, way }
     public class Address {
 
+        /// <summary>
+        /// Város
+        /// </summary>
         [BsonRequired]
         public string City { get; set; }
 
+        /// <summary>
+        /// Kerület
+        /// </summary>
         public int District { get; set; }
-
+        
+        /// <summary>
+        /// Közterület neve
+        /// </summary>
         public string StreetName { get; set; }
+
+        /// <summary>
+        /// Közterület típusa
+        /// </summary>
         public StreetType StreetType { get; set; }
 
+        /// <summary>
+        /// Házszám
+        /// </summary>
         public string StreetNumber { get; set; }
 
+        /// <summary>
+        /// Szélességi fok
+        /// </summary>
         public double? Longitude { get; set; }
 
+        /// <summary>
+        /// Magassági fok
+        /// </summary>
         public double? Latitude { get; set; }
 
+        /// <summary>
+        /// Elhelyezkedés
+        /// </summary>
         public GeoJsonPoint<GeoJson2DGeographicCoordinates> Location { get; private set; }
 
         public void SetLocation(double? lon, double? lat) {

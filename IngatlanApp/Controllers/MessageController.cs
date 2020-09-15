@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IngatlanApi.Controllers {
+    /// <summary>
+    /// Üzenetek kezelése
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class MessageController : ControllerBase {
@@ -23,6 +26,10 @@ namespace IngatlanApi.Controllers {
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Azon felhasználók lekérdezése amelyekkel a bejelentkezett felhasználó már váltott legalább egy db üzenetet
+        /// </summary>
+        /// <returns>Felhasználók listája</returns>
         [Route("/api/[controller]/users")]
         [Authorize]
         [HttpGet]
@@ -30,6 +37,12 @@ namespace IngatlanApi.Controllers {
             return _messageService.FindUsers(User.Identity.Name);
         }
 
+        /// <summary>
+        /// A bejelentkezett felhasználó egy adott másik felhasználóval váltott üzeneteinek listája. Lehetőség van csak az új, vagy minden üzenet lekérdezésére
+        /// </summary>
+        /// <param name="otherUser">Ellen felhasználó neve</param>
+        /// <param name="all">Minden üzenet lekérdezése, vagy csak az újakat.</param>
+        /// <returns>Kért üzenetek listája</returns>
         [Authorize]
         [HttpGet]
         public List<Message> Get([FromQuery]string otherUser, [FromQuery] bool all = true) {
@@ -46,12 +59,23 @@ namespace IngatlanApi.Controllers {
             return listunseen.OrderByDescending(m => m.TimeSent).ToList();
         }
 
+        /// <summary>
+        /// Egy adott azonosítóval rendelkező üzenet lekérdezése
+        /// </summary>
+        /// <param name="id">Az üzenet azonosítója</param>
+        /// <returns>A kért üzenet</returns>
         [Authorize]
         [HttpGet("{id:length(24)}")]
         public Message Get(string id) {
             return _messageService.FindById(id).Result;
         }
 
+        /// <summary>
+        /// Egy új üzenet küldése
+        /// </summary>
+        /// <param name="to">Címzett felhasználó neve</param>
+        /// <param name="text">Az üzenet szövege</param>
+        /// <returns>Az elküldött üzenet</returns>
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<Message>> Post([FromQuery]string to, [FromBody] string text) {
@@ -66,6 +90,11 @@ namespace IngatlanApi.Controllers {
             return message;
         }
 
+        /// <summary>
+        /// Láttam beállítása egy üzenetre
+        /// </summary>
+        /// <param name="id">Az üzenet azonosítója</param>
+        /// <returns>A módosított üzenet 200 OK vagy 404 Not Found</returns>
         [Route("/api/[controller]/setseen")]
         [Authorize]
         [HttpPatch]
