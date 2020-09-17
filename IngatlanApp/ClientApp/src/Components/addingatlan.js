@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { ApiCallItem, Ingatlantypes, Streettypes } from '../Api';
+import { ApiCallItem, Ingatlantypes, Streettypes, AdvertisementTypes } from '../Api';
 import { Card, Spinner, ListGroup, Form, Alert, Button, Row } from 'react-bootstrap';
 
 export default function AddIngatlan({ isLoggedIn }) {
 
     const [isLoading, setLoading] = useState(false);
+    const [adType, setAdType] = useState(0);
     const [error, setError] = useState(false);
     const [title, setTitle] = useState("");
     const [city, setCity] = useState("");
@@ -49,8 +50,9 @@ export default function AddIngatlan({ isLoggedIn }) {
         ingatlan.address.city = city;
         ingatlan.address.district = parseInt(district, 10);
         ingatlan.address.streetName = streetName;
-        ingatlan.address.streetType = streetType;
+        ingatlan.address.streetType = parseInt(streetType,10);
         ingatlan.address.streetNumber = streetNumber;
+        ingatlan.advertisementType = parseInt(adType, 10);
         ingatlan.price = parseFloat(price);
         ingatlan.ingatlanType = parseInt(type, 10);
         ingatlan.description = description;
@@ -110,16 +112,29 @@ export default function AddIngatlan({ isLoggedIn }) {
                                         </div>
                                     </div>
                                     <Form.Label>Your street's type</Form.Label>
-                                    <Form.Control as="select" value={type} onChange={e => { setTouched(true); setStreetType(e.target.value); }}>
-                                        <option value="2">{Streettypes(1)}</option>
-                                        <option value="3">{Streettypes(2)}</option>
-                                        <option value="4">{Streettypes(3)}</option>
+                                    <Form.Control as="select" value={streetType} onChange={e => { setTouched(true); setStreetType(e.target.value); }}>
+                                        <option value="1">{Streettypes(1)}</option>
+                                        <option value="2">{Streettypes(2)}</option>
+                                        <option value="3">{Streettypes(3)}</option>
                                     </Form.Control>
                                 </ListGroup.Item>
                                 <ListGroup.Item>
-                                    <Form.Label>Your desired price</Form.Label>
-                                    <Row><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="0.1" placeholder="XX.XX" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} /> M. Ft.</Row>
+                                    <Form.Label>Is your estate for sale or for rent</Form.Label>
+                                    <Row><Form.Control as="select" value={adType} onChange={e => {setTouched(true); setAdType(e.target.value)}}>
+                                        <option value="0">Select one</option>
+                                        <option value="1">{AdvertisementTypes(1)}</option>
+                                        <option value="2">{AdvertisementTypes(2)}</option>
+                                        <option value="3">{AdvertisementTypes(3)}</option>
+                                    </Form.Control></Row>
                                 </ListGroup.Item>
+                                {adType != 0? <ListGroup.Item>
+                                    <Form.Label>Your desired price</Form.Label>
+                                    <Row>{adType == 1 ? <><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="0.1" placeholder="XX.XX" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
+                                        M. Ft. </>: adType == 2 ? <><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="1" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
+                                        Ft. / Month</>:<><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="1" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
+                                        Ft. / Day</>}
+                                    </Row>
+                                </ListGroup.Item>: <></>}
                                 <ListGroup.Item>
                                     <Form.Label>Your estate's type</Form.Label>
                                     <Form.Control as="select" value={type} onChange={e => { setTouched(true); setType(e.target.value); }}>

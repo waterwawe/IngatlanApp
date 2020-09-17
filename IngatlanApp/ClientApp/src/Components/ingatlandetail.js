@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ApiCallAccount, ApiCallItem, Ingatlantypes, ApiCallImage } from '../Api';
+import { ApiCallAccount, ApiCallItem, Ingatlantypes, ApiCallImage, AdvertisementTypes } from '../Api';
 import house from './pics/house.PNG';
 import { Carousel, Modal, Button, Card, ListGroup, Container, Image, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -141,11 +141,11 @@ export default function Details({ match }) {
             <ListGroup>
               {details.ingatlanType ?
                 <ListGroup.Item>
-                  <Row><b>Type: <span> &nbsp; </span></b> {Ingatlantypes(details.ingatlanType)}</Row>
+                  <Row><b>Type: <span> &nbsp; </span></b> {Ingatlantypes(details.ingatlanType)}, {AdvertisementTypes(details.advertisementType)}</Row>
                 </ListGroup.Item> : <></>}
               {details.price ?
                 <ListGroup.Item>
-                  <Row><b>Price: <span> &nbsp; </span></b> {details.price} M Ft.</Row>
+                  <Row><b>Price: <span> &nbsp; </span></b> {details.price} {details.advertisementType === 1?"M Ft.": details.advertisementType === 2? "Ft. / month": "Ft. / day"}</Row>
                 </ListGroup.Item> : <></>}
               {details.address ?
                 <ListGroup.Item>

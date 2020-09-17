@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Form, Row, ListGroup } from 'react-bootstrap';
+import { Card, Form, ListGroup } from 'react-bootstrap';
 import IngatlanList from './ingatlanlist';
-import { ApiCallItem, Ingatlantypes } from '../Api';
+import {AdvertisementTypes, ApiCallItem, Ingatlantypes } from '../Api';
 
 export default function Search() {
+  const [adType, setAdType] = useState(0);
   const [searchObj, setSearchObj] = useState({});
   const [descContains, setDesc] = useState("");
   const [cities, setCities] = useState([""]);
@@ -13,10 +14,6 @@ export default function Search() {
   const [types, setTypes] = useState([]);
   const [priceFrom, setPriceFrom] = useState();
   const [priceTo, setPriceTo] = useState();
-
-  const refresh = () => {
-    return null;
-  }
 
   function titleCase(str) {
     var splitStr = str.toLowerCase().split(' ');
@@ -82,8 +79,12 @@ export default function Search() {
     if (desc) {
       queryObject.descriptionContains = desc.split(" ");
     }
-    else if(descContains){
+    else if (descContains) {
       queryObject.descriptionContains = descContains.split(" ");
+    }
+
+    if(adType){
+      queryObject.advertisementType = parseInt(adType);
     }
 
     if (city)
@@ -101,9 +102,8 @@ export default function Search() {
     if (priceTo)
       queryObject.priceTo = priceTo;
 
-      console.log(queryObject);
-      setSearchObj(queryObject);
-      refresh();
+    console.log(queryObject);
+    setSearchObj(queryObject);
   }
 
   const onMultipleSelectChange = e => {
@@ -138,7 +138,7 @@ export default function Search() {
       searchIngatlans();
     }
 
-  }, [city, district, priceFrom, priceTo])
+  }, [city, district, priceFrom, priceTo, adType])
 
   return (
     <div className="d-flex justify-content-center">
@@ -172,8 +172,14 @@ export default function Search() {
             </ListGroup.Item>
             <ListGroup.Item className="search-from-element col-sm-11 col-md-5 col-lg-5 col-xl-3">
               <Form.Group>
+                <Form.Label>For rent or for sale?</Form.Label>
+                <Form.Control as="select" value={adType} onChange={e => setAdType(e.target.value)}>
+                  <option value="1">{AdvertisementTypes(1)}</option>
+                  <option value="2">{AdvertisementTypes(2)}</option>
+                  <option value="3">{AdvertisementTypes(3)}</option>
+                </Form.Control>
                 <Form.Label>Description contains</Form.Label>
-                <Form.Control type="text" as="textarea" rows="2" size="sm" placeholder="Enter desired words in description" value={descContains} onChange={e => { setDesc(e.target.value); debounceHandleChange(e.target.value) }} />
+                <Form.Control type="text" placeholder="Enter desired words in description" value={descContains} onChange={e => { setDesc(e.target.value); debounceHandleChange(e.target.value) }} />
               </Form.Group>
             </ListGroup.Item>
             <ListGroup.Item className="search-from-element col-sm-11 col-md-5 col-lg-11 col-xl-3">
@@ -190,7 +196,7 @@ export default function Search() {
             </ListGroup.Item>
           </ListGroup>
         </Card>
-        <IngatlanList queryobj={searchObj} refresh={refresh} />
+        <IngatlanList queryobj={searchObj}/>
       </Card>
     </div>
   )

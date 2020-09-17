@@ -3,7 +3,7 @@ import { ApiCallItem } from '../Api'
 import { ListGroup, Alert, Pagination } from 'react-bootstrap'
 import IngatlanThumbnail from './ingatlanthumbnail'
 
-export default function IngatlanList({ queryobj, refresh }) {
+export default function IngatlanList({ queryobj}) {
 
   const pagesize = 10;
 
@@ -112,7 +112,7 @@ export default function IngatlanList({ queryobj, refresh }) {
       setDone(false);
       getIngatlan();
     }
-  }, [queryobj, refresh])
+  }, [queryobj])
 
   return (
     <div className="ingatlan-list">

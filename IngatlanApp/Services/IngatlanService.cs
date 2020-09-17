@@ -73,6 +73,12 @@ namespace IngatlanApi.Services {
                 combinefilter = Builders<Ingatlan>.Filter.And(combinefilter, ownerfilter);
             }
 
+            if (queryDTO.AdvertisementType != 0)
+            {
+                ownerfilter = Builders<Ingatlan>.Filter.Eq(x => x.AdvertisementType, queryDTO.AdvertisementType);
+                combinefilter = Builders<Ingatlan>.Filter.And(combinefilter, ownerfilter);
+            }
+
 
             if (queryDTO.DescriptionContains != null) {
                 descriptionfilter = Builders<Ingatlan>.Filter.Empty;

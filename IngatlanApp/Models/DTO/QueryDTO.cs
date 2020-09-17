@@ -12,6 +12,11 @@ namespace IngatlanApi.Models.DTO {
         public Address Address { get; set; }
 
         /// <summary>
+        /// Hirdetés típusa
+        /// </summary>
+        public AdvertisementType AdvertisementType { get; set; }
+
+        /// <summary>
         /// Ennél olcsóbb ingatlanok szűrve lesznek
         /// </summary>
         public double? PriceFrom { get; set; }

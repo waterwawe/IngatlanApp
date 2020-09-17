@@ -8,7 +8,15 @@ using System.Threading.Tasks;
 
 namespace IngatlanApi.Models {
 
+    /// <summary>
+    /// Ingatlan típusa 0-Ismeretlen 1-Családi ház 2-Ikerház, 3-Lakás, 4-Penthouse, 5-Farm
+    /// </summary>
     public enum IngatlanType {Undefined, DetachedHouse, SemiDeatchedHouse, Apartment, Penthouse, Farm}
+
+    /// <summary>
+    /// Hirdetés típusa 0-Ismeretlen 1-Eladó 2-Kiadó 3-Rövidtávon kiadó
+    /// </summary>
+    public enum AdvertisementType { Undefined, Sale, Rent, Rbnb}
 
     public class Ingatlan {
 
@@ -25,6 +33,11 @@ namespace IngatlanApi.Models {
         [BsonRequired]
         public string Title { get; set; }
 
+        /// <summary>
+        /// Hirdetés típusa
+        /// </summary>
+        [BsonRequired]
+        public AdvertisementType AdvertisementType { get; set; }
 
         /// <summary>
         /// Ingatlan (földrajzi) címe

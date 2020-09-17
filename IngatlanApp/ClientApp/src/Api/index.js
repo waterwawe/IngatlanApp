@@ -9,6 +9,21 @@ export const ApiCallMessage = "/api/message";
 //export const ApiCallImage = "/api/image";
 //export const ApiCallMessage = "/api/message";
 
+export const AdvertisementTypes = (value) => {
+  switch(value) {
+      case 0:
+        return "Unkown";
+      case 1:
+        return "For sale"
+      case 2:
+          return "For rent"
+      case 3:
+          return "AirBnB"
+      default:
+        return "Unkown"
+    }
+}
+
 export const Ingatlantypes = (value) => {
     switch(value) {
         case 0:

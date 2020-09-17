@@ -39,6 +39,7 @@ namespace IngatlanApi.Controllers {
         /// <param name="priceTo">Ennél az értéknél drágább ingatlanok szűrve lesznek.</param>
         /// <param name="ingatlanType">Adott típusú ingatlanok listázása, több is megadható tömbként</param>
         /// <param name="city">Csak egy bizonyos városban lévő ingatlanok listázása</param>
+        /// <param name="advertisementType">Ingatlan hirdetés típusa</param>
         /// <param name="district">Csak egy bizonyos kerületben lévő ingatlanok listázása</param>
         /// <param name="streetname">Csak egy bizonyos utcában lévő ingatlanok listázása</param>
         /// <param name="owner">Csak egy hirdető által feladott ingatlanok listázása</param>
@@ -52,6 +53,7 @@ namespace IngatlanApi.Controllers {
             [FromQuery]IngatlanType[] ingatlanType, 
             [FromQuery]string city,
             [FromQuery]int district,
+            [FromQuery]AdvertisementType advertisementType,
             [FromQuery]string streetname, 
             [FromQuery] string owner,
             [FromQuery] string[] descriptioncontains) {
@@ -62,6 +64,7 @@ namespace IngatlanApi.Controllers {
                     District = district
                 },
                 IngatlanType = ingatlanType,
+                AdvertisementType = advertisementType,
                 PriceFrom = priceFrom,
                 PriceTo = priceTo,
                 DescriptionContains = descriptioncontains,

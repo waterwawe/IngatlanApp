@@ -65,7 +65,7 @@
             Ingatlonok kezelése (CRUD)
             </summary>
         </member>
-        <member name="M:IngatlanApi.Controllers.IngatlanController.Get(System.Double,System.Double,IngatlanApi.Models.IngatlanType[],System.String,System.Int32,System.String,System.String,System.String[])">
+        <member name="M:IngatlanApi.Controllers.IngatlanController.Get(System.Double,System.Double,IngatlanApi.Models.IngatlanType[],System.String,System.Int32,IngatlanApi.Models.AdvertisementType,System.String,System.String,System.String[])">
             <summary>
             Ingatlanok lekérdezésére szolgál, a megadott szűrők alapján. Ha egy paramtér null, akkor nem történik szűrés az adott paraméter alapján.
             </summary>
@@ -73,6 +73,7 @@
             <param name="priceTo">Ennél az értéknél drágább ingatlanok szűrve lesznek.</param>
             <param name="ingatlanType">Adott típusú ingatlanok listázása, több is megadható tömbként</param>
             <param name="city">Csak egy bizonyos városban lévő ingatlanok listázása</param>
+            <param name="advertisementType">Ingatlan hirdetés típusa</param>
             <param name="district">Csak egy bizonyos kerületben lévő ingatlanok listázása</param>
             <param name="streetname">Csak egy bizonyos utcában lévő ingatlanok listázása</param>
             <param name="owner">Csak egy hirdető által feladott ingatlanok listázása</param>
@@ -287,6 +288,11 @@
             Címre szűrés
             </summary>
         </member>
+        <member name="P:IngatlanApi.Models.DTO.QueryDTO.AdvertisementType">
+            <summary>
+            Hirdetés típusa
+            </summary>
+        </member>
         <member name="P:IngatlanApi.Models.DTO.QueryDTO.PriceFrom">
             <summary>
             Ennél olcsóbb ingatlanok szűrve lesznek
@@ -362,6 +368,16 @@
             Jelszó megerősítése
             </summary>
         </member>
+        <member name="T:IngatlanApi.Models.IngatlanType">
+            <summary>
+            Ingatlan típusa 0-Ismeretlen 1-Családi ház 2-Ikerház, 3-Lakás, 4-Penthouse, 5-Farm
+            </summary>
+        </member>
+        <member name="T:IngatlanApi.Models.AdvertisementType">
+            <summary>
+            Hirdetés típusa 0-Ismeretlen 1-Eladó 2-Kiadó 3-Rövidtávon kiadó
+            </summary>
+        </member>
         <member name="P:IngatlanApi.Models.Ingatlan.Id">
             <summary>
             Ingatlan azonosítója
@@ -370,6 +386,11 @@
         <member name="P:IngatlanApi.Models.Ingatlan.Title">
             <summary>
             Hirdetés címe
+            </summary>
+        </member>
+        <member name="P:IngatlanApi.Models.Ingatlan.AdvertisementType">
+            <summary>
+            Hirdetés típusa
             </summary>
         </member>
         <member name="P:IngatlanApi.Models.Ingatlan.Address">
