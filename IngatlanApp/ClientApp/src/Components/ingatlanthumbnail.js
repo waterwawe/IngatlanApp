@@ -67,7 +67,7 @@ export default function IngatlanThumbnail({ingatlan}){
                     <Row><b>Address: </b> {`${titleCase(ingatlan.address.city)}, ${romanize(ingatlan.address.district)} ,${titleCase(ingatlan.address.streetName)}`}</Row>
                     <Row><b>Type: </b> {Ingatlantypes(ingatlan.ingatlanType)}</Row>
                     <Row><b> Owner: </b> {ingatlan.ownerUsername}</Row>
-                    <Row><b>Price: </b> {ingatlan.price} M Ft.</Row>
+                    <Row><b>Price: <span> &nbsp; </span></b> {ingatlan.price} {ingatlan.advertisementType === 1?"M Ft.": ingatlan.advertisementType === 2? "Ft. / month": "Ft. / day"}</Row>
                 </ListGroup.Item>
                 <ListGroup.Item className="col-sm-3 col-md-3 col-lg-3">
                 <Link to={`/ingatlan/${ingatlan.id}`}><Button className="ingatlan-list-button" variant="primary">Read more</Button></Link>
