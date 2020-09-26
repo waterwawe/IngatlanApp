@@ -289,8 +289,7 @@ namespace IngatlanApi.Controllers {
         /// </summary>
         /// <param name="id">Az ingatlan azonosítója</param>
         /// <returns>A törölt ingatlan 200 OK, 404 Not found, vagy 401 Unathorized</returns>
-        [Route("api/[controller]/{id:length(24)}")]
-        [HttpDelete]
+        [HttpDelete("{id:length(24)}")]
         [Authorize]
         public ActionResult<Ingatlan> Delete(string id) {
             var ingatlan = _ingatlanService.Get(id).Result;

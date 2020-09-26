@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ApiCallAccount, ApiCallItem, ApiCallImage, Ingatlantypes } from '../Api';
 import { Alert, Container, Row, Popover, OverlayTrigger, ListGroup, Form, Card, Modal, Spinner, Button, Badge } from 'react-bootstrap';
 import { Redirect, Link } from 'react-router-dom';
-import Map from './map';
+import Map from './editmap';
 
 export default function Edit({ match }) {
   const [file, setFile] = useState();
@@ -93,7 +93,9 @@ export default function Edit({ match }) {
       setPrice(data.price);
       setLongitude(parseFloat(data.address.longitude));
       setLatitude(parseFloat(data.address.latitude));
-      console.log(images);
+      if (!(data.address.longitude && data.address.latitude)) {
+        getCurrentLocation();
+      }
       if (data.images) {
         if (data.images.length > 0) {
           if (!done) {
@@ -118,13 +120,13 @@ export default function Edit({ match }) {
     }
   }
 
-  async function updateLocation(lng, lat){
+  async function updateLocation(lng, lat) {
     setLongitude(parseFloat(lng));
     setLatitude(parseFloat(lat));
     setLoading(true);
     let ingatlan = JSON.parse(JSON.stringify(details));
-    if(lng && lat)
-    ingatlan.address.longitude = parseFloat(lng);
+    if (lng && lat)
+      ingatlan.address.longitude = parseFloat(lng);
     ingatlan.address.latitude = parseFloat(lat);
     console.log(ingatlan);
 
@@ -222,6 +224,17 @@ export default function Edit({ match }) {
           setImages(imgtemp);
         });
     });
+  }
+
+  const getCurrentLocation = () => {
+    if (navigator && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        const coords = pos.coords;
+        console.log(coords);
+        setLongitude(coords.longitude);
+        setLatitude(coords.latitude);
+      });
+    }
   }
 
   const updateIngatlan = async (e) => {
@@ -365,8 +378,8 @@ export default function Edit({ match }) {
                   </ListGroup.Item> : <></>}
                 {details.price ?
                   <ListGroup.Item>
-                    <Row><b>Price: <span> &nbsp; </span></b> {details.price} M Ft.
-                    <span> &nbsp; </span><OverlayTrigger trigger="click" placement="right" overlay={popoverPrice}>
+                    <Row><b>Price: <span> &nbsp; </span></b> {details.price} {details.advertisementType === 1 ? "M Ft." : details.advertisementType === 2 ? "Ft. / month" : "Ft. / day"}
+                      <span> &nbsp; </span><OverlayTrigger trigger="click" placement="right" overlay={popoverPrice}>
                         <Badge variant="primary" className="edit-button">Edit</Badge>
                       </OverlayTrigger>
                     </Row>
@@ -399,9 +412,9 @@ export default function Edit({ match }) {
           <Card>
             <Card.Body className="edit-map">
               <Map updateLocation={updateLocation} center={{
-            lat: latitude,
-            lng: longitude
-        }}/>
+                lat: latitude,
+                lng: longitude
+              }} />
             </Card.Body>
           </Card>
         </> :

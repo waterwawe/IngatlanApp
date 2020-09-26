@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ApiCallAccount, ApiCallItem, Ingatlantypes, ApiCallImage, AdvertisementTypes } from '../Api';
 import house from './pics/house.PNG';
 import { Carousel, Modal, Button, Card, ListGroup, Container, Image, Row } from 'react-bootstrap';
+import Map from './detailmap';
 import { Link } from 'react-router-dom';
 
 export default function Details({ match }) {
@@ -9,7 +10,6 @@ export default function Details({ match }) {
   const [details, setDetails] = useState({});
   const [images, setImages] = useState([]);
   const [done, setDone] = useState(false);
-  const [username, setUsername] = useState("");
   const [show, setShow] = useState(false);
   const [createdAt, setCreatedAt] = useState(new Date());
 
@@ -90,7 +90,6 @@ export default function Details({ match }) {
       }
     });
     const data = await response.json();
-    setUsername(data.userName);
   }
 
   useEffect(() => {
@@ -122,19 +121,19 @@ export default function Details({ match }) {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Container className="mt-2 text-center col-sm-11 col-md-10 col-lg-8">
+      <Container className="mt-2 mb-2 text-center col-sm-11 col-md-10 col-lg-8">
         <Card className="ingatlan-detail-card" bg="light">
           <Card.Body className="text-center">
             <Card.Title>{details.title}</Card.Title>
             <Carousel className="detail-image-carousel col-sm-11 col-md-10 col-lg-8">
               {details.images ? images.map((img) => {
                 return (<Carousel.Item key={img}>
-                    <Image
-                      className="detail-image"
-                      src={img}
-                      fluid
-                      onClick={handleShow}
-                    />
+                  <Image
+                    className="detail-image"
+                    src={img}
+                    fluid
+                    onClick={handleShow}
+                  />
                 </Carousel.Item>)
               }) : <Image src={house} fluid thumbnail />}
             </Carousel>
@@ -145,7 +144,7 @@ export default function Details({ match }) {
                 </ListGroup.Item> : <></>}
               {details.price ?
                 <ListGroup.Item>
-                  <Row><b>Price: <span> &nbsp; </span></b> {details.price} {details.advertisementType === 1?"M Ft.": details.advertisementType === 2? "Ft. / month": "Ft. / day"}</Row>
+                  <Row><b>Price: <span> &nbsp; </span></b> {details.price} {details.advertisementType === 1 ? "M Ft." : details.advertisementType === 2 ? "Ft. / month" : "Ft. / day"}</Row>
                 </ListGroup.Item> : <></>}
               {details.address ?
                 <ListGroup.Item>
@@ -163,13 +162,24 @@ export default function Details({ match }) {
                 </ListGroup.Item> : <></>}
               {details.createdAt ?
                 <ListGroup.Item>
-                  <Row><b>Available since: <span> &nbsp; </span></b> {("0" + createdAt.getDate()).slice(-2) + "-" + ("0"+(createdAt.getMonth()+1)).slice(-2) + "-" +
-    createdAt.getFullYear() + " " + ("0" + createdAt.getHours()).slice(-2) + ":" + ("0" + createdAt.getMinutes()).slice(-2)}</Row>
+                  <Row><b>Available since: <span> &nbsp; </span></b> {("0" + createdAt.getDate()).slice(-2) + "-" + ("0" + (createdAt.getMonth() + 1)).slice(-2) + "-" +
+                    createdAt.getFullYear() + " " + ("0" + createdAt.getHours()).slice(-2) + ":" + ("0" + createdAt.getMinutes()).slice(-2)}</Row>
                 </ListGroup.Item> : <></>}
-
             </ListGroup>
           </Card.Body>
         </Card>
+        {details.address ?
+          details.address.longitude && details.address.latitude ? <Card>
+            <Card.Body className="edit-map">
+              <Map center={{
+                lat: details.address.latitude,
+                lng: details.address.longitude
+
+              }} ingatlan={details} />
+            </Card.Body>
+          </Card> : <></>
+          : <></>
+        }
       </Container>
     </>
   );

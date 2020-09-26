@@ -59,7 +59,6 @@ export default function IngatlanThumbnail({ ingatlan }) {
             if(response.ok){
                 const json = await response.json()
                 setViewCount(json.views);
-                console.log(json.views);
             }
         }
         setDone(true);
