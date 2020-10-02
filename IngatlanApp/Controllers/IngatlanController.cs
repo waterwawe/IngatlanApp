@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IngatlanApi.Models;
 using IngatlanApi.Models.DTO;
 using IngatlanApi.Services;
+using IngatlanApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,13 @@ namespace IngatlanApi.Controllers {
 
         private readonly IHostEnvironment _environment;
         private readonly IngatlanService _ingatlanService;
+        private readonly UserService userService;
         private readonly ViewService _viewService;
         private IHttpContextAccessor _accessor;
 
-        public IngatlanController(IHostEnvironment env,IngatlanService ingatlanService, ViewService viewService, IHttpContextAccessor accessor) {
+        public IngatlanController(IHostEnvironment env, IngatlanService ingatlanService, UserService userService, ViewService viewService, IHttpContextAccessor accessor) {
             _ingatlanService = ingatlanService;
+            this.userService = userService;
             _environment = env;
             _viewService = viewService;
             _accessor = accessor;
@@ -48,13 +51,13 @@ namespace IngatlanApi.Controllers {
         [Route("/api/[controller]")]
         [HttpGet]
         public ActionResult<List<Ingatlan>> Get(
-            [FromQuery]double priceFrom, 
-            [FromQuery]double priceTo, 
-            [FromQuery]IngatlanType[] ingatlanType, 
-            [FromQuery]string city,
-            [FromQuery]int district,
-            [FromQuery]AdvertisementType advertisementType,
-            [FromQuery]string streetname, 
+            [FromQuery] double priceFrom,
+            [FromQuery] double priceTo,
+            [FromQuery] IngatlanType[] ingatlanType,
+            [FromQuery] string city,
+            [FromQuery] int district,
+            [FromQuery] AdvertisementType advertisementType,
+            [FromQuery] string streetname,
             [FromQuery] string owner,
             [FromQuery] string[] descriptioncontains) {
             var queryDTO = new QueryDTO {
@@ -102,7 +105,7 @@ namespace IngatlanApi.Controllers {
         /// <returns>Az ingatlan a feltöltött képpel hivatkozva</returns>
         [Authorize]
         [HttpPost("{id:length(24)}")]
-        public async Task<ActionResult<string>> Upload(string id,IFormFile file) {
+        public async Task<ActionResult<string>> Upload(string id, IFormFile file) {
             var ingatlan = _ingatlanService.Get(id).Result;
 
             if (ingatlan == null) {
@@ -140,7 +143,7 @@ namespace IngatlanApi.Controllers {
             _ingatlanService.Update(ingatlan.Id, ingatlan);
 
             return Ok(ingatlan);
-       }
+        }
 
         /// <summary>
         /// Egy adott kép törlése az ingatlan hirdetéséből
@@ -151,7 +154,7 @@ namespace IngatlanApi.Controllers {
         [Route("/api/[controller]/image")]
         [Authorize]
         [HttpDelete]
-        public IActionResult DeleteImage([FromQuery]string id, [FromQuery]string name) { 
+        public IActionResult DeleteImage([FromQuery] string id, [FromQuery] string name) {
             var ingatlan = _ingatlanService.Get(id).Result;
 
             if (ingatlan == null)
@@ -159,20 +162,57 @@ namespace IngatlanApi.Controllers {
             if (ingatlan.OwnerUsername != User.Identity.Name)
                 Unauthorized();
 
-            if (ingatlan.Images.Remove(name)) { 
-            _ingatlanService.Update(ingatlan.Id, ingatlan);
+            if (ingatlan.Images.Remove(name)) {
+                _ingatlanService.Update(ingatlan.Id, ingatlan);
 
-            var imagePath = @"\Upload\Images\";
-            var uploadPath = _environment.ContentRootPath + imagePath;
-            var fullPath = uploadPath + name;
+                var imagePath = @"\Upload\Images\";
+                var uploadPath = _environment.ContentRootPath + imagePath;
+                var fullPath = uploadPath + name;
 
-            FileInfo file = new FileInfo(fullPath);
-            file.Delete();
+                FileInfo file = new FileInfo(fullPath);
+                file.Delete();
 
-            return Ok();
+                return Ok();
             }
 
             return NotFound("Image not found");
+        }
+
+        [HttpGet("{id:length(24)}/highlight")]
+        public async Task<ActionResult<Ingatlan>> Get(string id, [FromQuery] HighlightType highlightType) {
+            var ingatlan = _ingatlanService.Get(id).Result;
+
+            if (ingatlan == null) {
+                return NotFound();
+            }
+
+            if(ingatlan.OwnerUsername.ToLowerInvariant() != User.Identity.Name.ToLowerInvariant()) {
+                return Unauthorized();
+            }
+
+            int daysToAdd;
+            int creditsToRemove;
+
+            if (highlightType == HighlightType.Day) {
+                daysToAdd = 1;
+                creditsToRemove = 25;
+            } else if (highlightType == HighlightType.Month) {
+                daysToAdd = 7;
+                creditsToRemove = 100;
+            } else {
+                daysToAdd = 31;
+                creditsToRemove = 300;
+            }
+
+            try { 
+            await userService.RemoveCredits(User.Identity.Name, creditsToRemove);
+            } catch(ArgumentException e) {
+                return Forbid(e.Message);
+            }
+
+            ingatlan.HighlightedUntil = DateTime.Now.AddDays(daysToAdd);
+
+            return ingatlan;
         }
 
         /// <summary>
@@ -198,7 +238,7 @@ namespace IngatlanApi.Controllers {
 
             return ingatlan;
         }
-        
+
         /// <summary>
         /// Az ingatlan megtekintések számának lekérdezése
         /// </summary>
@@ -210,7 +250,7 @@ namespace IngatlanApi.Controllers {
         public IActionResult GetViewCount([FromQuery] string id) {
             var ingatlan = _ingatlanService.Get(id).Result;
 
-            if(ingatlan == null) {
+            if (ingatlan == null) {
                 return NotFound();
             }
 
@@ -263,7 +303,7 @@ namespace IngatlanApi.Controllers {
             if (ingatlan == null) {
                 return NotFound();
             }
-            if(ingatlan.OwnerUsername != User.Identity.Name) {
+            if (ingatlan.OwnerUsername != User.Identity.Name) {
                 return Unauthorized();
             }
 
@@ -271,7 +311,7 @@ namespace IngatlanApi.Controllers {
             if (ingatlanIn.Address.StreetName != null)
                 ingatlanIn.Address.StreetName = ingatlanIn.Address.StreetName.ToLower();
 
-            if(ingatlanIn.Address.Latitude != null && ingatlanIn.Address.Longitude != null)
+            if (ingatlanIn.Address.Latitude != null && ingatlanIn.Address.Longitude != null)
                 ingatlanIn.Address.SetLocation(ingatlanIn.Address.Longitude, ingatlanIn.Address.Latitude);
 
             ingatlanIn.OwnerUsername = ingatlan.OwnerUsername;

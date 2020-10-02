@@ -90,8 +90,18 @@ namespace IngatlanApi.Services {
                 combinefilter = Builders<Ingatlan>.Filter.And(combinefilter, descriptionfilter);
             }
 
-            return await _ingatlanok.Find(combinefilter).ToListAsync();
+            var ingatlans = await _ingatlanok.Find(combinefilter).ToListAsync();
 
+            foreach (var ingatlan in ingatlans) {
+                var span = ingatlan.HighlightedUntil - DateTime.Now;
+                if(span.TotalSeconds <= 0) {
+                    ingatlan.IsHighlighted = false;
+                } else {
+                    ingatlan.IsHighlighted = true;
+                }
+            }
+
+            return ingatlans;
         }
 
         public List<string> GetCites() {

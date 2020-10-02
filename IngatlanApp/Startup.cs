@@ -63,6 +63,7 @@ namespace IngatlanApp
                 sp.GetRequiredService<IOptions<IngatlanDatabaseSettings>>().Value);
 
             services.AddSingleton<IngatlanService>();
+            services.AddSingleton<UserService>();
             services.AddSingleton<ReviewService>();
             services.AddSingleton<ViewService>();
             services.AddSingleton<MessageService>();

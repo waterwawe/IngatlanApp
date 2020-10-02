@@ -428,6 +428,16 @@
             Képek listája (csak a képek fájlnevei)
             </summary>
         </member>
+        <member name="P:IngatlanApi.Models.Ingatlan.IsHighlighted">
+            <summary>
+            Kiemelt  hirdetés flag
+            </summary>
+        </member>
+        <member name="P:IngatlanApi.Models.Ingatlan.HighlightedUntil">
+            <summary>
+            Az időpont amíg kiemelve marad
+            </summary>
+        </member>
         <member name="P:IngatlanApi.Models.Ingatlan.Description">
             <summary>
             Hirdetés leírása

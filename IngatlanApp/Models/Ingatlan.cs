@@ -79,6 +79,16 @@ namespace IngatlanApi.Models {
         public List<string> Images{ get; set;}
 
         /// <summary>
+        /// Kiemelt  hirdetés flag
+        /// </summary>
+        public bool IsHighlighted { get; set; }
+
+        /// <summary>
+        /// Az időpont amíg kiemelve marad
+        /// </summary>
+        public DateTimeOffset HighlightedUntil { get; set; }
+
+        /// <summary>
         /// Hirdetés leírása
         /// </summary>
         [BsonRequired]

@@ -365,6 +365,14 @@ export default function Edit({ match }) {
           <Card className="ingatlan-detail-card mt-2 mb-2">
             <Card.Body>
               <ListGroup className="edit-list">
+                  <ListGroup.Item>
+                    <Row><b>Highlight your ad! : <span> &nbsp; </span></b>
+                      <span> &nbsp; </span>
+                      <Button className="ml-2 mr-2">Highlight for a day</Button>
+                      <Button className="ml-2 mr-2">Highlight for a week</Button>
+                      <Button className="ml-2 mr-2">Highlight for a month</Button>
+                      </Row>
+                  </ListGroup.Item>
                 {details.title ?
                   <ListGroup.Item>
                     <Row><b>Title: <span> &nbsp; </span></b> {`${details.title} `}

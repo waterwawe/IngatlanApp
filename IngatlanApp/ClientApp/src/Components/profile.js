@@ -31,6 +31,7 @@ export default function Profile({ isSignedin }) {
                     <Row><p><b>Username: </b> {user.userName}</p></Row>
                     <Row><p><b>Full name: </b> {'' + user.firstName + '  ' + user.lastName}</p></Row>
                     <Row><p><b>E-mail Address: </b> {user.email}</p></Row>
+                    <Row><p><b>Credits: </b> {user.credits}</p></Row>
                 </Card.Body>
                 <Card></Card>
             </Card>

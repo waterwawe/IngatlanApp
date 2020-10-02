@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace IngatlanApi.Services {
@@ -21,5 +22,15 @@ namespace IngatlanApi.Services {
         public List<ApplicationUser> Get() =>
             _users.Find(house => true).ToList();
 
+        public async Task RemoveCredits(string username, int credits) {
+            var user = await _users.Find(u => u.UserName.ToLowerInvariant() == username.ToLowerInvariant()).FirstAsync();
+            
+            if(user.Credits - credits < 0) {
+                throw new ArgumentException("User doesn't have enough credits");
+            }
+            user.Credits -= credits;
+
+            await _users.ReplaceOneAsync(u => u.Id == user.Id, user);
+        }
     }
 }

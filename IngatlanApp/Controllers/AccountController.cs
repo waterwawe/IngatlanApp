@@ -88,7 +88,8 @@ namespace IngatlanApi.Controllers
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                UserName = user.UserName
+                UserName = user.UserName,
+                Credits = user.Credits
             };
 
             return Ok(dto);
@@ -124,7 +125,7 @@ namespace IngatlanApi.Controllers
         [Route("/[controller]/register")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDTO newUser) {
-            var user = new ApplicationUser { UserName = newUser.UserName, Email = newUser.Email, FirstName = newUser.FirstName, LastName = newUser.LastName };
+            var user = new ApplicationUser { UserName = newUser.UserName, Email = newUser.Email, FirstName = newUser.FirstName, LastName = newUser.LastName, Credits = 100 };
             IdentityResult response;
 
             if (newUser.Password.Equals(newUser.ConfirmPassword)) {
