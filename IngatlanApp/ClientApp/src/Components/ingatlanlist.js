@@ -3,12 +3,13 @@ import { ApiCallItem } from '../Api'
 import { ListGroup, Alert, Pagination } from 'react-bootstrap'
 import IngatlanThumbnail from './ingatlanthumbnail'
 
-export default function IngatlanList({ queryobj}) {
+export default function IngatlanList({ queryobj }) {
 
   const pagesize = 10;
 
   const [searchObj, setSearchObj] = useState({});
   const [ingatlanList, setList] = useState([]);
+  const [highlightList, sethighlightList] = useState([]);
   const [listToDisplay, setListToDisplay] = useState([]);
   const [error, setError] = useState(false);
   const [done, setDone] = useState(false);
@@ -48,7 +49,18 @@ export default function IngatlanList({ queryobj}) {
       if (response.ok) {
         setError(false);
         const json = await response.json();
-        setList(json);
+        let highList = [];
+        let normalList = [];
+        json.forEach(ingatlan => {
+          if (ingatlan.isHighlighted) {
+            highList.push(ingatlan);
+          }
+          else {
+            normalList.push(ingatlan);
+          }
+        });
+        sethighlightList(highlightList);
+        setList(normalList);
         let pagelist = [];
         pagelist.push(1);
         let pagenumber = 1;
@@ -84,7 +96,7 @@ export default function IngatlanList({ queryobj}) {
 
     let newList = ingatlanList.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     setList(newList);
-    initListToDisplay(currentPage,newList);
+    initListToDisplay(currentPage, newList);
   }
 
   const orderPriceLowToHigh = () => {
@@ -94,7 +106,7 @@ export default function IngatlanList({ queryobj}) {
 
     let newList = ingatlanList.sort((a, b) => (a.price > b.price) ? 1 : -1);
     setList(newList);
-    initListToDisplay(currentPage,newList);
+    initListToDisplay(currentPage, newList);
   }
 
   const orderPriceHighToLow = () => {
@@ -104,7 +116,7 @@ export default function IngatlanList({ queryobj}) {
 
     let newList = ingatlanList.sort((a, b) => (a.price < b.price) ? 1 : -1);
     setList(newList);
-    initListToDisplay(currentPage,newList);
+    initListToDisplay(currentPage, newList);
   }
 
   useEffect(() => {
@@ -128,9 +140,18 @@ export default function IngatlanList({ queryobj}) {
     </ListGroup.Item>
       </ListGroup>
       <ListGroup>
-        {error ? <Alert show={true}>No matches found</Alert> : listToDisplay.map((ingatlan) => {
-          return (<IngatlanThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
-        })}
+        {error ? <Alert show={true}>No matches found</Alert> :
+          <>{currentPage === 1 ?
+            <>
+              <h4> Highlighted ads</h4>
+              {highlightList.map((ingatlan) => {
+                return (<IngatlanThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
+              })}</>
+            : <>
+            </>}
+            {listToDisplay.map((ingatlan) => {
+              return (<IngatlanThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
+            })}</>}
       </ListGroup>
       <Pagination>
         <Pagination.First onClick={() => { initListToDisplay(1, ingatlanList) }} />
@@ -144,12 +165,13 @@ export default function IngatlanList({ queryobj}) {
               return (<Pagination.Item key={pagenum} active>{pagenum}</Pagination.Item>);
             else
               return (<Pagination.Item key={pagenum} onClick={() => { initListToDisplay(pagenum, ingatlanList) }}>{pagenum}</Pagination.Item>);
-      }})}
+          }
+        })}
         <Pagination.Next onClick={() => {
           if (currentPage + 1 <= pageNumbers.length)
             initListToDisplay(currentPage + 1, ingatlanList)
         }} />
-        <Pagination.Last onClick={() => { initListToDisplay(pageNumbers.length, ingatlanList) }}/>
+        <Pagination.Last onClick={() => { initListToDisplay(pageNumbers.length, ingatlanList) }} />
       </Pagination>
     </div>
   );
