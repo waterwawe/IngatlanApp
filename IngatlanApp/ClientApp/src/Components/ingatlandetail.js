@@ -174,7 +174,6 @@ export default function Details({ match }) {
               <Map center={{
                 lat: details.address.latitude,
                 lng: details.address.longitude
-
               }} ingatlan={details} />
             </Card.Body>
           </Card> : <></>

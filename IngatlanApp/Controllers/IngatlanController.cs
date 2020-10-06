@@ -212,6 +212,8 @@ namespace IngatlanApi.Controllers {
 
             ingatlan.HighlightedUntil = DateTime.Now.AddDays(daysToAdd);
 
+            _ingatlanService.Update(ingatlan.Id, ingatlan);
+
             return ingatlan;
         }
 

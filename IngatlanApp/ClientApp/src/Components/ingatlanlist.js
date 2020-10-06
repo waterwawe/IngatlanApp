@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ApiCallItem } from '../Api'
-import { ListGroup, Alert, Pagination } from 'react-bootstrap'
+import { ListGroup, Alert, Pagination, Dropdown } from 'react-bootstrap'
 import IngatlanThumbnail from './ingatlanthumbnail'
 
 export default function IngatlanList({ queryobj }) {
@@ -9,7 +9,7 @@ export default function IngatlanList({ queryobj }) {
 
   const [searchObj, setSearchObj] = useState({});
   const [ingatlanList, setList] = useState([]);
-  const [highlightList, sethighlightList] = useState([]);
+  const [highlightList, setHighlightlist] = useState([]);
   const [listToDisplay, setListToDisplay] = useState([]);
   const [error, setError] = useState(false);
   const [done, setDone] = useState(false);
@@ -54,12 +54,13 @@ export default function IngatlanList({ queryobj }) {
         json.forEach(ingatlan => {
           if (ingatlan.isHighlighted) {
             highList.push(ingatlan);
+
           }
           else {
             normalList.push(ingatlan);
           }
         });
-        sethighlightList(highlightList);
+        setHighlightlist(highList);
         setList(normalList);
         let pagelist = [];
         pagelist.push(1);
@@ -94,6 +95,8 @@ export default function IngatlanList({ queryobj }) {
     setHighToLow(false);
     setNewest(true);
 
+    let newHighlighted = highlightList.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+    setHighlightlist(newHighlighted);
     let newList = ingatlanList.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     setList(newList);
     initListToDisplay(currentPage, newList);
@@ -104,6 +107,8 @@ export default function IngatlanList({ queryobj }) {
     setHighToLow(false);
     setNewest(false);
 
+    let newHighlighted = highlightList.sort((a, b) => (a.price > b.price) ? 1 : -1);
+    setHighlightlist(newHighlighted);
     let newList = ingatlanList.sort((a, b) => (a.price > b.price) ? 1 : -1);
     setList(newList);
     initListToDisplay(currentPage, newList);
@@ -114,6 +119,8 @@ export default function IngatlanList({ queryobj }) {
     setHighToLow(true);
     setNewest(false);
 
+    let newHighlighted = highlightList.sort((a, b) => (a.price < b.price) ? 1 : -1);
+    setHighlightlist(newHighlighted);
     let newList = ingatlanList.sort((a, b) => (a.price < b.price) ? 1 : -1);
     setList(newList);
     initListToDisplay(currentPage, newList);
@@ -146,7 +153,10 @@ export default function IngatlanList({ queryobj }) {
               <h4> Highlighted ads</h4>
               {highlightList.map((ingatlan) => {
                 return (<IngatlanThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
-              })}</>
+              })
+              }
+              <Dropdown.Divider/>
+            </>
             : <>
             </>}
             {listToDisplay.map((ingatlan) => {

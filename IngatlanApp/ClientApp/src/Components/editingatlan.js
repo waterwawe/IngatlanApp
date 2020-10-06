@@ -13,6 +13,7 @@ export default function Edit({ match }) {
   const [done, setDone] = useState(false);
   const [show, setShow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showHighlight, setShowhighlight] = useState(false);
   const [selected, setSelected] = useState({})
   const [username, setUsername] = useState("");
   const [title, setTitle] = useState("");
@@ -28,6 +29,9 @@ export default function Edit({ match }) {
 
   const handleCloseDelete = () => setShowDelete(false);
   const handleShowDelete = () => setShowDelete(true);
+
+  const handleCloseHighlight = () => setShowhighlight(false);
+  const handleShowHighlight = () => setShowhighlight(true);
 
   const showTextArea = () => setDisplayTextArea(true);
 
@@ -209,6 +213,20 @@ export default function Edit({ match }) {
     setDisplayTextArea(false);
   }
 
+  const highlight = async (type) => {
+    const response = await fetch(`${ApiCallItem}/${details.id}/highlight?highlightType=${type}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (response.ok) {
+      handleCloseHighlight();
+      setSuccess(true);
+    }
+  }
+
   const getImage = async (imgarray) => {
     let imgtemp = [];
     imgarray.map(async (image) => {
@@ -307,7 +325,7 @@ export default function Edit({ match }) {
                     </Button>
             </Modal.Footer>
           </Modal>
-          <Modal show={showDelete} onHide={handleClose}>
+          <Modal show={showDelete} onHide={handleCloseDelete}>
             <Modal.Header closeButton>
               <Modal.Title>Delete advertisement</Modal.Title>
             </Modal.Header>
@@ -335,6 +353,27 @@ export default function Edit({ match }) {
               <Button variant="secondary" onClick={closeTextArea}>
                 Cancel
                       </Button>
+            </Modal.Footer>
+          </Modal>
+          <Modal show={showHighlight} onHide={handleCloseHighlight}>
+            <Modal.Header closeButton>
+              <Modal.Title>Highlight your advertisement</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>What time would you want to highlight your ad?
+              <Row className="mt-2 mb-2">
+                <Button className="ml-2 mr-2" onClick={e => { highlight(0); }}>Highlight for a day</Button> - 25 Credits
+              </Row>
+              <Row className="mt-2 mb-2">
+                <Button className="ml-2 mr-2" onClick={e => { highlight(1); }}>Highlight for a week</Button> - 100 Credits
+              </Row>
+              <Row className="mt-2 mb-2">
+                <Button className="ml-2 mr-2" onClick={e => { highlight(2); }}>Highlight for a month</Button> - 300 Credits
+              </Row>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseHighlight}>
+                Cancel
+              </Button>
             </Modal.Footer>
           </Modal>
           <Card className="margin-10px">
@@ -365,14 +404,9 @@ export default function Edit({ match }) {
           <Card className="ingatlan-detail-card mt-2 mb-2">
             <Card.Body>
               <ListGroup className="edit-list">
-                  <ListGroup.Item>
-                    <Row><b>Highlight your ad! : <span> &nbsp; </span></b>
-                      <span> &nbsp; </span>
-                      <Button className="ml-2 mr-2">Highlight for a day</Button>
-                      <Button className="ml-2 mr-2">Highlight for a week</Button>
-                      <Button className="ml-2 mr-2">Highlight for a month</Button>
-                      </Row>
-                  </ListGroup.Item>
+                <ListGroup.Item>
+                  <Button className="ml-2 mr-2" onClick={handleShowHighlight}>Highlight your ad!</Button>
+                </ListGroup.Item>
                 {details.title ?
                   <ListGroup.Item>
                     <Row><b>Title: <span> &nbsp; </span></b> {`${details.title} `}
@@ -428,8 +462,9 @@ export default function Edit({ match }) {
         </> :
         <Card>
           <Card.Body>You are not the owner of this ad.</Card.Body>
-        </Card>}
+        </Card>
+      }
 
-    </Container>
+    </Container >
   )
 }
