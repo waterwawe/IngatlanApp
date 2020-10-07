@@ -2,9 +2,11 @@
 using IngatlanApi.Models.DTO;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace IngatlanApi.Services {
@@ -73,8 +75,7 @@ namespace IngatlanApi.Services {
                 combinefilter = Builders<Ingatlan>.Filter.And(combinefilter, ownerfilter);
             }
 
-            if (queryDTO.AdvertisementType != 0)
-            {
+            if (queryDTO.AdvertisementType != 0) {
                 ownerfilter = Builders<Ingatlan>.Filter.Eq(x => x.AdvertisementType, queryDTO.AdvertisementType);
                 combinefilter = Builders<Ingatlan>.Filter.And(combinefilter, ownerfilter);
             }
@@ -94,7 +95,7 @@ namespace IngatlanApi.Services {
 
             foreach (var ingatlan in ingatlans) {
                 var span = ingatlan.HighlightedUntil - DateTime.Now;
-                if(span.TotalSeconds <= 0) {
+                if (span.TotalSeconds <= 0) {
                     ingatlan.IsHighlighted = false;
                 } else {
                     ingatlan.IsHighlighted = true;
@@ -102,6 +103,13 @@ namespace IngatlanApi.Services {
             }
 
             return ingatlans;
+        }
+
+        public async Task<List<Ingatlan>> GetByLocation(double longitude, double latitude, double distance) {
+            return await _ingatlanok.Find(i => i.Address.Latitude >= latitude - distance &&
+            i.Address.Latitude <= latitude + distance &&
+            i.Address.Longitude >= longitude - distance && i.Address.Longitude <= longitude + distance)
+                .ToListAsync();
         }
 
         public List<string> GetCites() {

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 
 namespace IngatlanApi.Controllers {
     /// <summary>
@@ -75,6 +76,12 @@ namespace IngatlanApi.Controllers {
             };
 
             return Ok(_ingatlanService.Get(queryDTO).Result);
+        }
+
+        [Route("/api/[controller]/bylocation")]
+        [HttpGet]
+        public async Task<List<Ingatlan>> GetByLocation([FromQuery] double longitude, [FromQuery] double latitude, [FromQuery]double distance) {
+            return await _ingatlanService.GetByLocation(longitude, latitude, distance);
         }
 
         /// <summary>

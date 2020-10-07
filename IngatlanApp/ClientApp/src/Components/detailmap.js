@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
-import { Map, GoogleApiWrapper, Marker, InfoWindow, CurrentLocation } from 'google-maps-react';
-import { Ingatlantypes } from '../Api'
+import React, { useState} from 'react';
+import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import { useHistory } from 'react-router-dom';
 
 const mapStyles = {
   width: '96%',
   height: '94%'
 };
 
-export function MapContainer({ ingatlan, google, center }) {
+var count = 0;
+
+export function MapContainer({ ingatlans, google, center }) {
   const [activeMarker, setActiveMarker] = useState();
-  const [showingInfoWindow, setShowingInfoWindow] = useState(false);
+  let history = useHistory();
 
-
-  const onMarkerClick = (props, marker, e) => {
-    setActiveMarker(marker);
-    setShowingInfoWindow(true);
+  const onMarkerClick = (id) => {
+    history.push(`/ingatlan/${id}`)
   };
 
-  const onClose = props => {
-    if (showingInfoWindow) {
-      setActiveMarker(null);
-      setShowingInfoWindow(false);
-    }
-  };
+  const onClose = () => {
+    setActiveMarker(null);
+  }
+
 
   function titleCase(str) {
     var splitStr = str.toLowerCase().split(' ');
@@ -52,28 +50,20 @@ export function MapContainer({ ingatlan, google, center }) {
       zoom={16}
       style={mapStyles}
       initialCenter={center}>
-      <Marker
-        onClick={onMarkerClick}
-        name={"Your estate's location"}
-      />
-      <InfoWindow
-        marker={activeMarker}
-        visible={showingInfoWindow}
-        onClose={onClose}
-      >
-        <div className="text-left">
-          <h5>{ingatlan.title}</h5>
-          <div>
-            <b>Address: <span> &nbsp; </span></b> {`${titleCase(ingatlan.address.city)}, ${romanize(ingatlan.address.district)}. ,${titleCase(ingatlan.address.streetName)}`} {ingatlan.address.streetNumber ? `${ingatlan.address.streetNumber}.` : <></>}
-          </div>
-          <div>
-            <b>Type: <span> &nbsp; </span></b> {Ingatlantypes(ingatlan.ingatlanType)}
-          </div>
-          <div>
-            <b>Price: <span> &nbsp; </span></b> {ingatlan.price} {ingatlan.advertisementType === 1 ? "M Ft." : ingatlan.advertisementType === 2 ? "Ft. / month" : "Ft. / day"}
-          </div>
-        </div>
-      </InfoWindow>
+      {ingatlans.map((ingatlan) => {
+        return (
+          
+            <Marker
+              onClick={e => {onMarkerClick(ingatlan.id)}}
+              key={ingatlan.id + "marker"}
+              position={{
+                lat: ingatlan.address.latitude,
+                lng: ingatlan.address.longitude
+              }}
+            >
+            </Marker>
+        );
+      })}
     </Map >
   );
 }
@@ -81,7 +71,7 @@ export function MapContainer({ ingatlan, google, center }) {
 export default GoogleApiWrapper(
   (props) => ({
     apiKey: "AIzaSyApJurg5jDh3TeApK0pe9zIDuKSfaf7p94",
-    ingatlan: props.ingatlan,
-    center: props.center
+    ingatlan: props.ingatlans,
+    center: props.center,
   }
   ))(MapContainer)

@@ -19,6 +19,7 @@ export default function MyNavbar({ loggedinState, username }) {
         <Nav className="mr-auto">
           <Nav.Link href="/#/">Home</Nav.Link>
           <Nav.Link href="/#/search">Search properties</Nav.Link>
+          <Nav.Link href="/#/map">Open map</Nav.Link>
         </Nav>
         <Nav>
           {loggedinState ?
