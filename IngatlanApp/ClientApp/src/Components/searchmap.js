@@ -46,7 +46,7 @@ export default function SearchMap() {
     return (
         <div className="d-flex justify-content-center">
             <Card className="col-md-11 col-lg-9" bg="light" variant="light">
-                <Card.Body className="edit-map">
+                <Card.Body className="big-map">
                 <Map center={{
                     lat: latitude,
                     lng: longitude

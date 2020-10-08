@@ -170,6 +170,11 @@ body, html {
   width: 30rem;
 }
 
+.big-map{
+  height: 50rem;
+  width: 30rem;
+}
+
 .upload-image{
   display:flex;
   justify-content: center;
