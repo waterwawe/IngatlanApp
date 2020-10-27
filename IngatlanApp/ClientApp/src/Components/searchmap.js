@@ -26,11 +26,11 @@ export default function SearchMap() {
         }
     }
 
+    //Jelenlegi helyzet elkérése a böngészőtől
     const getCurrentLocation = async () => {
         if (navigator && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(pos => {
                 const coords = pos.coords;
-                console.log(coords);
                 setLongitude(coords.longitude);
                 setLatitude(coords.latitude);
                 getIngatlans(coords);

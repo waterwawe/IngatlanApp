@@ -5,6 +5,7 @@ import Chat from './chat';
 import { Card } from 'react-bootstrap';
 
 export default function Messages({ match }) {
+    //Állapotváltozók
     const [activeUser, setActiveUser] = useState("");
     const [users, setUsers] = useState([]);
 
@@ -33,6 +34,7 @@ export default function Messages({ match }) {
     }
 
     useEffect(() => {
+        //Felhasználók listájának lekérése az API-tól.
         getUsers();
     }, [activeUser])
 

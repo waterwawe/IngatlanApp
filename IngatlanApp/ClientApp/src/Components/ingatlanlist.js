@@ -150,7 +150,7 @@ export default function IngatlanList({ queryobj }) {
         {error ? <Alert show={true}>No matches found</Alert> :
           <>{currentPage === 1 ?
             <>
-              <h4> Highlighted ads</h4>
+              {highlightList.length > 0 ?  <h4> Highlighted ads</h4> : <></>}
               {highlightList.map((ingatlan) => {
                 return (<IngatlanThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
               })
