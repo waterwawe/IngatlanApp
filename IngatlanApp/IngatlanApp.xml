@@ -122,14 +122,14 @@
             <param name="id">Az ingatlan azonosítója</param>
             <returns>200 OK - Az ingatlan megetkintéseinek száma, 400 Not Found vagy 401 Unauthorized</returns>
         </member>
-        <member name="M:IngatlanApi.Controllers.IngatlanController.Create(IngatlanApi.Models.Ingatlan)">
+        <member name="M:IngatlanApi.Controllers.IngatlanController.Create(IngatlanApi.Models.Estate)">
             <summary>
             Új ingatlan hozzáadása
             </summary>
             <param name="ingatlan">Az ingatlan JSON objektum</param>
             <returns>A létrehozott ingatlan azonosítóval</returns>
         </member>
-        <member name="M:IngatlanApi.Controllers.IngatlanController.Update(System.String,IngatlanApi.Models.Ingatlan)">
+        <member name="M:IngatlanApi.Controllers.IngatlanController.Update(System.String,IngatlanApi.Models.Estate)">
             <summary>
             Már létező ingatlan szerkesztése, felülírása
             </summary>
@@ -378,67 +378,67 @@
             Hirdetés típusa 0-Ismeretlen 1-Eladó 2-Kiadó 3-Rövidtávon kiadó
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.Id">
+        <member name="P:IngatlanApi.Models.Estate.Id">
             <summary>
             Ingatlan azonosítója
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.Title">
+        <member name="P:IngatlanApi.Models.Estate.Title">
             <summary>
             Hirdetés címe
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.AdvertisementType">
+        <member name="P:IngatlanApi.Models.Estate.AdvertisementType">
             <summary>
             Hirdetés típusa
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.Address">
+        <member name="P:IngatlanApi.Models.Estate.Address">
             <summary>
             Ingatlan (földrajzi) címe
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.Price">
+        <member name="P:IngatlanApi.Models.Estate.Price">
             <summary>
             Ingatlan ára
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.IngatlanType">
+        <member name="P:IngatlanApi.Models.Estate.IngatlanType">
             <summary>
             Ingatlan típusa 1-Családi ház 2-Ikerház 3-Lakás 4-Penthouse 5-Farm
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.OwnerUsername">
+        <member name="P:IngatlanApi.Models.Estate.OwnerUsername">
             <summary>
             Hirdető felhasználóneve
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.NormalizedOwnerUsername">
+        <member name="P:IngatlanApi.Models.Estate.NormalizedOwnerUsername">
             <summary>
             Hirdető felhasználóneve kisbetűvel
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.CreatedAt">
+        <member name="P:IngatlanApi.Models.Estate.CreatedAt">
             <summary>
             Létrehozás dátuma
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.Images">
+        <member name="P:IngatlanApi.Models.Estate.Images">
             <summary>
             Képek listája (csak a képek fájlnevei)
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.IsHighlighted">
+        <member name="P:IngatlanApi.Models.Estate.IsHighlighted">
             <summary>
             Kiemelt  hirdetés flag
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.HighlightedUntil">
+        <member name="P:IngatlanApi.Models.Estate.HighlightedUntil">
             <summary>
             Az időpont amíg kiemelve marad
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Ingatlan.Description">
+        <member name="P:IngatlanApi.Models.Estate.Description">
             <summary>
             Hirdetés leírása
             </summary>

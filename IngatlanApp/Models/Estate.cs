@@ -18,7 +18,7 @@ namespace IngatlanApi.Models {
     /// </summary>
     public enum AdvertisementType { Undefined, Sale, Rent, Rbnb}
 
-    public class Ingatlan {
+    public class Estate {
 
         /// <summary>
         /// Ingatlan azonosítója

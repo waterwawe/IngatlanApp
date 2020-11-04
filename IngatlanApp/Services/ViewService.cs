@@ -14,16 +14,16 @@ namespace IngatlanApi.Services {
             var database = client.GetDatabase(settings.DatabaseName);
 
             _views = database.GetCollection<View>(settings.ViewCollectionName);
-            _views.Indexes.CreateOne(Builders<View>.IndexKeys.Ascending(_ => _.IngatlanId));
+            _views.Indexes.CreateOne(Builders<View>.IndexKeys.Ascending(_ => _.EstateId));
         }
 
         public async Task<View> FindByIngatlanId(string id) {
-            return await _views.Find(v => v.IngatlanId == id).SingleOrDefaultAsync();
+            return await _views.Find(v => v.EstateId == id).SingleOrDefaultAsync();
         }
 
         public async Task<View> AddView(string ingatlanId) {
             var view = new View();
-            view.IngatlanId = ingatlanId;
+            view.EstateId = ingatlanId;
             view.ViewedByUsernameList = new List<string>();
             await _views.InsertOneAsync(view);
             return view;

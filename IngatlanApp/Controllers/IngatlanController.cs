@@ -51,7 +51,7 @@ namespace IngatlanApi.Controllers {
         /// <returns>Keresési feltételeknek megfelő ingatlanok listája</returns>
         [Route("/api/[controller]")]
         [HttpGet]
-        public ActionResult<List<Ingatlan>> Get(
+        public ActionResult<List<Estate>> Get(
             [FromQuery] double priceFrom,
             [FromQuery] double priceTo,
             [FromQuery] IngatlanType[] ingatlanType,
@@ -80,7 +80,7 @@ namespace IngatlanApi.Controllers {
 
         [Route("/api/[controller]/bylocation")]
         [HttpGet]
-        public async Task<List<Ingatlan>> GetByLocation([FromQuery] double longitude, [FromQuery] double latitude, [FromQuery]double distance) {
+        public async Task<List<Estate>> GetByLocation([FromQuery] double longitude, [FromQuery] double latitude, [FromQuery]double distance) {
             return await _ingatlanService.GetByLocation(longitude, latitude, distance);
         }
 
@@ -186,7 +186,7 @@ namespace IngatlanApi.Controllers {
         }
 
         [HttpGet("{id:length(24)}/highlight")]
-        public async Task<ActionResult<Ingatlan>> Get(string id, [FromQuery] HighlightType highlightType) {
+        public async Task<ActionResult<Estate>> Get(string id, [FromQuery] HighlightType highlightType) {
             var ingatlan = _ingatlanService.Get(id).Result;
 
             if (ingatlan == null) {
@@ -230,7 +230,7 @@ namespace IngatlanApi.Controllers {
         /// <param name="id">Az ingatlan azonosítója (24 karakter)</param>
         /// <returns>A kért ingatlan (200 OK) vagy 404 (Not Found)</returns>
         [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<Ingatlan>> Get(string id) {
+        public async Task<ActionResult<Estate>> Get(string id) {
             var ingatlan = _ingatlanService.Get(id).Result;
 
             if (ingatlan == null) {
@@ -280,7 +280,7 @@ namespace IngatlanApi.Controllers {
         /// <returns>A létrehozott ingatlan azonosítóval</returns>
         [HttpPost]
         [Authorize]
-        public ActionResult<Ingatlan> Create(Ingatlan ingatlan) {
+        public ActionResult<Estate> Create(Estate ingatlan) {
             ingatlan.OwnerUsername = User.Identity.Name;
             ingatlan.NormalizedOwnerUsername = User.Identity.Name.ToLower();
 
@@ -303,7 +303,7 @@ namespace IngatlanApi.Controllers {
         /// <returns>204 No content</returns>
         [HttpPut("{id:length(24)}")]
         [Authorize]
-        public IActionResult Update(string id, Ingatlan ingatlanIn) {
+        public IActionResult Update(string id, Estate ingatlanIn) {
             var ingatlan = _ingatlanService.Get(id).Result;
 
             if (id != ingatlanIn.Id)
@@ -340,7 +340,7 @@ namespace IngatlanApi.Controllers {
         /// <returns>A törölt ingatlan 200 OK, 404 Not found, vagy 401 Unathorized</returns>
         [HttpDelete("{id:length(24)}")]
         [Authorize]
-        public ActionResult<Ingatlan> Delete(string id) {
+        public ActionResult<Estate> Delete(string id) {
             var ingatlan = _ingatlanService.Get(id).Result;
 
             if (ingatlan == null) {
