@@ -4,6 +4,9 @@ import house from './pics/house.PNG';
 import { Carousel, Modal, Button, Card, ListGroup, Container, Image, Row } from 'react-bootstrap';
 import Map from './detailmap';
 import { Link } from 'react-router-dom';
+import { getIngatlanDetails } from '../Services/ingatlanService';
+import { getImage } from '../Services/imageService';
+import { getLoggedIn } from '../Services/accountService'
 
 export default function Details({ match }) {
 
@@ -40,33 +43,19 @@ export default function Details({ match }) {
   }
 
   const getDetails = async () => {
-    const response = await fetch(`${ApiCallItem}/${match.params.id}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
 
+    const response = await getIngatlanDetails(match.params.id);
     if (response.ok) {
       const data = await response.json();
       setDetails(data);
       setCreatedAt(new Date(data.createdAt));
-      console.log(images);
       if (data.images) {
         if (data.images.length > 0) {
           if (!done) {
             let imgtemp = [];
             data.images.map(async (image) => {
-              await fetch(`${ApiCallImage}/${image}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              }).then(response => response.blob())
+              await getImage(image)
                 .then(imgs => {
-                  console.log(imgtemp);
                   imgtemp = imgtemp.concat(URL.createObjectURL(imgs));
                   setImages(imgtemp);
                 });
@@ -78,22 +67,7 @@ export default function Details({ match }) {
     }
   }
 
-  const getUser = async () => {
-    const response = await fetch(ApiCallAccount + "/isloggedin", {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Accept-Encoding': 'gzip, deflate, br'
-      }
-    });
-    const data = await response.json();
-  }
-
   useEffect(() => {
-    getUser();
     getDetails();
   }, [match.params.id])
 
@@ -123,7 +97,7 @@ export default function Details({ match }) {
       </Modal>
       <Container className="mt-2 mb-2 text-center col-sm-11 col-md-10 col-lg-8">
         <Card className="ingatlan-detail-card" bg="light">
-          <Card.Body className="text-center">
+          <Card.Body className="text-center mt-2">
             <Card.Title>{details.title}</Card.Title>
             <Carousel className="detail-image-carousel col-sm-11 col-md-10 col-lg-8">
               {details.images ? images.map((img) => {
@@ -137,7 +111,7 @@ export default function Details({ match }) {
                 </Carousel.Item>)
               }) : <Image src={house} fluid thumbnail />}
             </Carousel>
-            <ListGroup>
+            <ListGroup className="mt-2">
               {details.ingatlanType ?
                 <ListGroup.Item>
                   <Row><b>Type: <span> &nbsp; </span></b> {Ingatlantypes(details.ingatlanType)}, {AdvertisementTypes(details.advertisementType)}</Row>
@@ -169,7 +143,7 @@ export default function Details({ match }) {
           </Card.Body>
         </Card>
         {details.address ?
-          details.address.longitude && details.address.latitude ? <Card>
+          details.address.longitude && details.address.latitude ? <Card className="mt-2">
             <Card.Body className="edit-map">
               <Map center={{
                 lat: details.address.latitude,

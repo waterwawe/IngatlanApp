@@ -3,11 +3,6 @@ export const ApiCallAccount = "/account";
 export const ApiCallReview = "/api/review";
 export const ApiCallImage = "/api/image";
 export const ApiCallMessage = "/api/message";
-//export const ApiCallItem = "/api/ingatlan";
-//export const ApiCallAccount = "/account";
-//export const ApiCallReview = "/api/review";
-//export const ApiCallImage = "/api/image";
-//export const ApiCallMessage = "/api/message";
 
 export const AdvertisementTypes = (value) => {
   switch(value) {
