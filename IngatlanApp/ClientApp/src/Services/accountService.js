@@ -44,3 +44,27 @@ export const registerProfile = async (user) => {
         body: JSON.stringify(user)
     });
 }
+
+export const logout = async () => {
+    return await fetch(ApiCallAccount + "/logout", {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+}
+
+export const login = async (user) =>{
+   return await fetch(ApiCallAccount + "/login", {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+          'Accept-Encoding': 'gzip, deflate, br'
+        },
+        body: JSON.stringify(user)
+      });
+}

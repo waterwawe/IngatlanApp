@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ApiCallAccount } from './Api';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import {logout, login, getLoggedIn} from './Services/AccountService';
 import Navbar from './Components/Navbar';
 import LoginForm from './Components/LoginForm';
 import Logout from './Components/Logout';
@@ -21,54 +21,31 @@ function App() {
   const [isLoggedin, setLoggedin] = useState(false);
   const [username, setUsername] = useState("");
 
-  const getLoggedin = async () => {
-    const response = await fetch(ApiCallAccount + "/isloggedin", {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Accept-Encoding': 'gzip, deflate, br'
-      }
-    });
-    const data = await response.json();
-    setLoggedin(data.isLoggedIn);
-    if (data.isLoggedIn)
-      setUsername(data.userName);
+  const getUserLoggedin = async () => {
+    const response = await getLoggedIn();
+    if (response.ok) {
+      const data = await response.json();
+      setLoggedin(data.isLoggedIn);
+      if (data.isLoggedIn)
+        setUsername(data.userName);
+    }
   }
 
-  const logout = async () => {
-    await fetch(ApiCallAccount + "/logout", {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+  const loguserout = async () => {
+    await logout();
     setLoggedin(false);
   }
 
 
-  const login = async (user) => {
-    const response = await fetch(ApiCallAccount + "/login", {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Accept-Encoding': 'gzip, deflate, br'
-      },
-      body: JSON.stringify(user)
-    });
+  const loguserin = async (user) => {
+    const response = await login(user);
     if (response.ok)
       setLoggedin(true);
     return response.ok;
   }
 
   useEffect(() => {
-    getLoggedin();
+    getUserLoggedin();
   }, []);
 
   return (
@@ -81,10 +58,10 @@ function App() {
           <Route path="/estate/:id/edit" component={Editestate} />
           <Route path="/newestate"><Addestate isLoggedIn={isLoggedin}></Addestate></Route>
           <Route path="/search"><Search /></Route>
-          <Route path="/map" component={SearchMap}/>
-          <Route path="/login"><LoginForm isLoggedin={isLoggedin} signIn={login} /></Route>
-          <Route path="/logout"><Logout signout={logout} /></Route>
-          <Route path="/register"><Register signIn={login} isLoggedIn={isLoggedin} /></Route>
+          <Route path="/map" component={SearchMap} />
+          <Route path="/login"><LoginForm isLoggedin={isLoggedin} signIn={loguserin} /></Route>
+          <Route path="/logout"><Logout signout={loguserout} /></Route>
+          <Route path="/register"><Register signIn={loguserin} isLoggedIn={isLoggedin} /></Route>
           <Route path="/profile" exact><Profile isSignedin={isLoggedin} /></Route>
           <Route path="/manage"><Manage username={username} /></Route>
           <Route path="/messages" exact component={Messages} />
