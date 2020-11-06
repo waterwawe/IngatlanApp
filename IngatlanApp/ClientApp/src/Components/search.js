@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Form, ListGroup } from 'react-bootstrap';
 import EstateList from './EstateList';
-import { AdvertisementTypes, estatetypes } from '../Api';
+import { AdvertisementTypes, estatetypes } from '../ApiConstants';
 import { getCities, getDistricts } from '../Services/EstateService';
 
 export default function Search() {

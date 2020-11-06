@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { estatetypes, AdvertisementTypes } from '../Api';
+import { estatetypes, AdvertisementTypes } from '../ApiConstants';
 import house from './pics/house.PNG';
 import { Carousel, Modal, Button, Card, ListGroup, Container, Image, Row } from 'react-bootstrap';
 import Map from './DetailMap';

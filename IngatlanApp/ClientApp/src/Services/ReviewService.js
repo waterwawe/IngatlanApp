@@ -1,4 +1,4 @@
-import { ApiCallReview } from '../Api';
+import { ApiCallReview } from '../ApiConstants';
 
 export const postReview = async (review) =>{
     return await fetch(`${ApiCallReview}`, {

@@ -1,4 +1,4 @@
-import { ApiCallItem } from '../Api';
+import { ApiCallItem } from '../ApiConstants';
 
 export const getEstateById = async (id) => {
   return await fetch(`${ApiCallItem}/${id}`, {

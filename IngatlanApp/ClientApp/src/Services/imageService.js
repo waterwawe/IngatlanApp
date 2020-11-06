@@ -1,4 +1,4 @@
-import {ApiCallImage} from '../Api';
+import {ApiCallImage} from '../ApiConstants';
 
 export const getImage = async (imageName) => {
     return await fetch(`${ApiCallImage}/${imageName}`, {

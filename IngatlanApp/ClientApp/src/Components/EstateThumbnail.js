@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, Row, Image, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import house from './pics/house.PNG';
-import { estatetypes } from '../Api';
+import { estatetypes } from '../ApiConstants';
 import { getImage } from '../Services/ImageService';
 
 export default function EstateThumbnail({ estate }) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { estatetypes, Streettypes, AdvertisementTypes } from '../Api';
+import { estatetypes, Streettypes, AdvertisementTypes } from '../ApiConstants';
 import { Card, Spinner, ListGroup, Form, Alert, Button, Row } from 'react-bootstrap';
 import { addEstate } from '../Services/EstateService';
 import { useHistory } from "react-router-dom";

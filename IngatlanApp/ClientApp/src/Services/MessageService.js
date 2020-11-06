@@ -1,4 +1,4 @@
-import { ApiCallMessage } from '../Api';
+import { ApiCallMessage } from '../ApiConstants';
 
 export const getMessagesWith = async (otherUser) => {
     return await fetch(`${ApiCallMessage}?otheruser=${otherUser}`, {

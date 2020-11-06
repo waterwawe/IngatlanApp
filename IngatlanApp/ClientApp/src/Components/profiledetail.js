@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Reviewtypes } from '../Api';
+import { Reviewtypes } from '../ApiConstants';
 import { Alert, Form, Spinner, Button, Collapse, Card, Row, ProgressBar, Container, ListGroup } from 'react-bootstrap';
 import EstateList from './EstateList';
 import { Link } from 'react-router-dom';

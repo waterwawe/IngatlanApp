@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { estatetypes } from '../Api';
+import { estatetypes } from '../ApiConstants';
 import { getLoggedIn } from '../Services/AccountService';
 import { deleteEstate, uploadImageToEstate, getEstateById, updateEstate, highlightEstate, removeImageFromEstate } from '../Services/EstateService';
 import { getImage } from '../Services/ImageService';

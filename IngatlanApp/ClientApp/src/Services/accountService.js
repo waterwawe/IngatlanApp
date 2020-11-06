@@ -1,4 +1,4 @@
-import { ApiCallAccount } from '../Api'
+import { ApiCallAccount } from '../ApiConstants'
 
 export const getLoggedIn = async () => {
     return await fetch(ApiCallAccount + "/isloggedin", {
