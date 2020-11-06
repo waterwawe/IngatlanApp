@@ -20,6 +20,16 @@ export const getEstates = async (queryobj) => {
   });
 }
 
+export const getEstatesByLocation = async (coords,distance) => {
+  return await fetch(`${ApiCallItem}/bylocation?longitude=${coords.longitude}&latitude=${coords.latitude}&distance=${distance}`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+}
+
 export const addEstate = async (estate) => {
   return await fetch(`${ApiCallItem}`, {
     method: 'POST',
@@ -84,6 +94,36 @@ export const highlightEstate = async (id,type) => {
     headers: {
       'Content-Type': 'application/json'
     }
+  });
+}
+
+export const getEstateViews = async (id) => {
+  return await fetch(`${ApiCallItem}/viewcount/?id=${id}`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+}
+
+export const getCities = async () => {
+  return await fetch(`${ApiCallItem}/cities`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+}
+
+export const getDistricts = async () => {
+  return await fetch(`${ApiCallItem}/districts`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
   });
 }
 

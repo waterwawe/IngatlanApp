@@ -51,7 +51,7 @@ namespace IngatlanApi.Controllers {
         /// <returns>Keresési feltételeknek megfelő ingatlanok listája</returns>
         [Route("/api/[controller]")]
         [HttpGet]
-        public ActionResult<List<Estate>> Get(
+        public async Task<ActionResult<List<Estate>>> Get(
             [FromQuery] double priceFrom,
             [FromQuery] double priceTo,
             [FromQuery] IngatlanType[] ingatlanType,
@@ -75,12 +75,12 @@ namespace IngatlanApi.Controllers {
                 OwnerUsername = owner
             };
 
-            return Ok(_ingatlanService.Get(queryDTO).Result);
+            return Ok(await _ingatlanService.Get(queryDTO));
         }
 
         [Route("/api/[controller]/bylocation")]
         [HttpGet]
-        public async Task<List<Estate>> GetByLocation([FromQuery] double longitude, [FromQuery] double latitude, [FromQuery]double distance) {
+        public async Task<List<Estate>> GetByLocation([FromQuery] double longitude, [FromQuery] double latitude, [FromQuery] double distance) {
             return await _ingatlanService.GetByLocation(longitude, latitude, distance);
         }
 
@@ -113,7 +113,7 @@ namespace IngatlanApi.Controllers {
         [Authorize]
         [HttpPost("{id:length(24)}")]
         public async Task<ActionResult<string>> Upload(string id, IFormFile file) {
-            var ingatlan = _ingatlanService.Get(id).Result;
+            var ingatlan = await _ingatlanService.Get(id);
 
             if (ingatlan == null) {
                 return NotFound();
@@ -161,8 +161,8 @@ namespace IngatlanApi.Controllers {
         [Route("/api/[controller]/image")]
         [Authorize]
         [HttpDelete]
-        public IActionResult DeleteImage([FromQuery] string id, [FromQuery] string name) {
-            var ingatlan = _ingatlanService.Get(id).Result;
+        public async Task<IActionResult> DeleteImage([FromQuery] string id, [FromQuery] string name) {
+            var ingatlan = await _ingatlanService.Get(id);
 
             if (ingatlan == null)
                 NotFound();
@@ -187,13 +187,13 @@ namespace IngatlanApi.Controllers {
 
         [HttpGet("{id:length(24)}/highlight")]
         public async Task<ActionResult<Estate>> Get(string id, [FromQuery] HighlightType highlightType) {
-            var ingatlan = _ingatlanService.Get(id).Result;
+            var ingatlan = await _ingatlanService.Get(id);
 
             if (ingatlan == null) {
                 return NotFound();
             }
 
-            if(ingatlan.OwnerUsername.ToLowerInvariant() != User.Identity.Name.ToLowerInvariant()) {
+            if (ingatlan.OwnerUsername.ToLowerInvariant() != User.Identity.Name.ToLowerInvariant()) {
                 return Unauthorized();
             }
 
@@ -211,9 +211,9 @@ namespace IngatlanApi.Controllers {
                 creditsToRemove = 300;
             }
 
-            try { 
-            await userService.RemoveCredits(User.Identity.Name, creditsToRemove);
-            } catch(ArgumentException e) {
+            try {
+                await userService.RemoveCredits(User.Identity.Name, creditsToRemove);
+            } catch (ArgumentException e) {
                 return Forbid(e.Message);
             }
 
@@ -231,16 +231,16 @@ namespace IngatlanApi.Controllers {
         /// <returns>A kért ingatlan (200 OK) vagy 404 (Not Found)</returns>
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Estate>> Get(string id) {
-            var ingatlan = _ingatlanService.Get(id).Result;
+            var ingatlan = await _ingatlanService.Get(id);
 
             if (ingatlan == null) {
                 return NotFound();
             }
 
-            var view = _viewService.FindByIngatlanId(ingatlan.Id).Result;
+            var view = await _viewService.FindByIngatlanId(ingatlan.Id);
 
             if (view == null)
-                view = _viewService.AddView(ingatlan.Id).Result;
+                view = await _viewService.AddView(ingatlan.Id);
 
             if (!view.ViewedByUsernameList.Contains(_accessor.HttpContext.Connection.RemoteIpAddress.ToString()))
                 await _viewService.AddUser(ingatlan.Id, _accessor.HttpContext.Connection.RemoteIpAddress.ToString());
@@ -256,8 +256,8 @@ namespace IngatlanApi.Controllers {
         [Route("/api/[controller]/viewcount")]
         [Authorize]
         [HttpGet]
-        public IActionResult GetViewCount([FromQuery] string id) {
-            var ingatlan = _ingatlanService.Get(id).Result;
+        public async Task<IActionResult> GetViewCount([FromQuery] string id) {
+            var ingatlan = await _ingatlanService.Get(id);
 
             if (ingatlan == null) {
                 return NotFound();
@@ -266,7 +266,7 @@ namespace IngatlanApi.Controllers {
             if (ingatlan.OwnerUsername.ToLowerInvariant() != User.Identity.Name.ToLowerInvariant())
                 return Unauthorized("");
 
-            var viewList = _viewService.FindByIngatlanId(ingatlan.Id).Result;
+            var viewList = await _viewService.FindByIngatlanId(ingatlan.Id);
             if (viewList == null)
                 return Ok(new { views = 0 });
 
@@ -303,8 +303,8 @@ namespace IngatlanApi.Controllers {
         /// <returns>204 No content</returns>
         [HttpPut("{id:length(24)}")]
         [Authorize]
-        public IActionResult Update(string id, Estate ingatlanIn) {
-            var ingatlan = _ingatlanService.Get(id).Result;
+        public async Task<IActionResult> Update(string id, Estate ingatlanIn) {
+            var ingatlan = await _ingatlanService.Get(id);
 
             if (id != ingatlanIn.Id)
                 return BadRequest();
@@ -340,8 +340,8 @@ namespace IngatlanApi.Controllers {
         /// <returns>A törölt ingatlan 200 OK, 404 Not found, vagy 401 Unathorized</returns>
         [HttpDelete("{id:length(24)}")]
         [Authorize]
-        public ActionResult<Estate> Delete(string id) {
-            var ingatlan = _ingatlanService.Get(id).Result;
+        public async Task<ActionResult<Estate>> Delete(string id) {
+            var ingatlan = await _ingatlanService.Get(id);
 
             if (ingatlan == null) {
                 return NotFound();

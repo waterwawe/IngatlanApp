@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { ApiCallAccount } from '../Api';
 import { Card, Row } from 'react-bootstrap';
+import { getProfile } from '../Services/AccountService';
 
 export default function Profile({ isSignedin }) {
 
     const [user, setUser] = useState({});
 
-    const getProfile = async () => {
-        const response = await fetch(ApiCallAccount + "/profile", {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        setUser(data);
+    const getUserProfile = async () => {
+        const response = await getProfile();
+        if (response.ok) {
+            const data = await response.json();
+            setUser(data);
+        }
     }
 
     useEffect(() => {
         if (isSignedin)
-            getProfile();
+            getUserProfile();
     }, [isSignedin])
 
     return (
@@ -35,7 +31,7 @@ export default function Profile({ isSignedin }) {
                 </Card.Body>
                 <Card></Card>
             </Card>
-        : <p>You are not logged in.</p>}
+            : <p>You are not logged in.</p>}
         </div>
     );
 }

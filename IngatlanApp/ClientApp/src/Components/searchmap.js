@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ApiCallItem } from '../Api';
 import { Card } from 'react-bootstrap';
+import { getEstatesByLocation} from '../Services/EstateService';
 import Map from './DetailMap';
 
 export default function SearchMap() {
@@ -12,14 +12,7 @@ export default function SearchMap() {
     const distance = 1;
 
     const getestates = async (coords) => {
-        console.log(coords);
-        const response = await fetch(`${ApiCallItem}/bylocation?longitude=${coords.longitude}&latitude=${coords.latitude}&distance=${distance}`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        const response = await getEstatesByLocation(coords,distance);
         if (response.ok) {
             const data = await response.json();
             setestates(data);

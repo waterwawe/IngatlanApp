@@ -127,7 +127,7 @@ export default function EstateList({ queryobj }) {
       </ListGroup>
       <ListGroup>
         {error ? <Alert show={true}>No matches found</Alert> :
-          <>{currentPage === 1 ?
+          <>{currentPage === 1 && highlightList.length !== 0 ?
             <>
               {highlightList.length > 0 ?  <h4> Highlighted ads</h4> : <></>}
               {highlightList.map((estate) => {

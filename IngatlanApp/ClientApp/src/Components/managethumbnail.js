@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, Row, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import house from './pics/house.PNG';
-import { ApiCallItem, ApiCallImage } from '../Api';
+import { getImage } from '../Services/ImageService';
+import { getEstateViews } from '../Services/EstateService';
 
 export default function EstateThumbnail({ estate }) {
 
@@ -36,28 +37,16 @@ export default function EstateThumbnail({ estate }) {
         if (!done) {
             if (estate.images) {
                 if (estate.images.length > 0) {
-                    await fetch(`${ApiCallImage}/${estate.images[0]}`, {
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(response => response.blob())
+                    await getImage(estate.images[0])
                         .then(images => {
                             setThumbnail(URL.createObjectURL(images))
                         });
                 }
             }
-            
-            const response = await fetch(`${ApiCallItem}/viewcount/?id=${estate.id}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if(response.ok){
-                const json = await response.json()
+
+            const response = await getEstateViews(estate.id);
+            if (response.ok) {
+                const json = await response.json();
                 setViewCount(json.views);
             }
         }
@@ -75,7 +64,7 @@ export default function EstateThumbnail({ estate }) {
                 <Image src={estate.images ? estate.images.length > 0 ? thumbnail : house : house} fluid thumbnail />
                 <Row><b>Address: </b> {`${titleCase(estate.address.city)}, ${romanize(estate.address.district)} ,${titleCase(estate.address.streetName)}`}</Row>
                 <Row><b>Price: </b> {estate.price} M. Ft.</Row>
-                <Row><b>Views:</b>{viewCount}</Row>
+                <Row><b>Views: </b>{viewCount}</Row>
                 <Link to={`/estate/${estate.id}/edit`}><Button variant="primary">Edit</Button></Link>
             </Card.Body>
         </Card>

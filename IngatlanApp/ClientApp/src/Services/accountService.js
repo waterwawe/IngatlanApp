@@ -12,3 +12,35 @@ export const getLoggedIn = async () => {
         }
     });
 }
+
+export const getProfile = async () => {
+    return await fetch(ApiCallAccount + "/profile", {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export const getUserProfile = async (username) => {
+    return await fetch(ApiCallAccount + `/profile/${username}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export const registerProfile = async (user) => {
+    return await fetch(`${ApiCallAccount}/register`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        method: 'POST',
+        body: JSON.stringify(user)
+    });
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { estatetypes, Streettypes, AdvertisementTypes } from '../Api';
 import { Card, Spinner, ListGroup, Form, Alert, Button, Row } from 'react-bootstrap';
 import { addEstate } from '../Services/EstateService';
+import { useHistory } from "react-router-dom";
 
 export default function Addestate({ isLoggedIn }) {
 
@@ -19,6 +20,8 @@ export default function Addestate({ isLoggedIn }) {
     const [price, setPrice] = useState();
     const [type, setType] = useState(1);
     const [touched, setTouched] = useState(false);
+
+    let history = useHistory();
 
     const getDistricts = () => {
         let distarray = [];
@@ -60,8 +63,10 @@ export default function Addestate({ isLoggedIn }) {
 
         const response = await addEstate(estate);
 
-        if (response.ok)
+        if (response.ok){
             setError(false);
+            history.push("/manage");
+        }
         else
             setError(true);
         setLoading(false);

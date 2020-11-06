@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ApiCallAccount, ApiCallItem } from '../Api';
 import { Container, Alert } from 'react-bootstrap';
 import ManageThumbnail from './Managethumbnail';
+import { getLoggedIn } from '../Services/AccountService';
+import { getEstates } from '../Services/EstateService';
 
 export default function Manage() {
 
@@ -9,19 +10,10 @@ export default function Manage() {
     const [done, setDone] = useState(false);
     const [error, setError] = useState(false);
 
-    const getestates = async () => {
+    const getUserEstates = async () => {
         let username;
 
-        const response = await fetch(ApiCallAccount + "/isloggedin", {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache',
-                'Connection': 'keep-alive',
-                'Accept-Encoding': 'gzip, deflate, br'
-            }
-        });
+        const response = await getLoggedIn();
         const data = await response.json();
         if (data.isLoggedIn)
             username = data.userName;
@@ -29,13 +21,8 @@ export default function Manage() {
         if (username) {
             if (0 < username.length) {
                 if (!done) {
-                    const response = await fetch(`${ApiCallItem}/?owner=${username}`, {
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                    });
+                    let queryobj = {owner: username};
+                    const response = await getEstates(queryobj);
                     if (response.ok) {
                         setError(false);
                         const json = await response.json();
@@ -53,7 +40,7 @@ export default function Manage() {
     }
 
     useEffect(() => {
-        getestates();
+        getUserEstates();
     }, [])
 
     return (

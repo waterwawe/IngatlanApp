@@ -35,8 +35,8 @@ namespace IngatlanApi.Controllers
         /// <returns>A kért értékelések listája</returns>
         [Route("/api/[controller]/{username}")]
         [HttpGet]
-        public ActionResult<List<Review>> GetbyUsername(string username) {
-            return _reviewService.GetByUsername(username).Result;
+        public async Task<ActionResult<List<Review>>> GetbyUsername(string username) {
+            return await _reviewService.GetByUsername(username);
         }
 
         /// <summary>
@@ -46,8 +46,8 @@ namespace IngatlanApi.Controllers
         /// <returns>Az értékelések száma</returns>
         [Route("/api/[controller]/{username}/count")]
         [HttpGet]
-        public ActionResult<List<ReviewDTO>> GetCountbyUsername(string username) {
-            return _reviewService.GetCountByUsername(username).Result;
+        public async Task<ActionResult<List<ReviewDTO>>> GetCountbyUsername(string username) {
+            return await _reviewService.GetCountByUsername(username);
         }
 
         /// <summary>
@@ -56,8 +56,8 @@ namespace IngatlanApi.Controllers
         /// <param name="id">Azonosító</param>
         /// <returns>A kért értékelés, 200 OK vagy 404 Not Found</returns>
         [HttpGet("{id:length(24)}")]
-        public ActionResult<Review> GetById(string id) {
-            var rev = _reviewService.Get(id).Result;
+        public async Task<ActionResult<Review>> GetById(string id) {
+            var rev = await _reviewService.Get(id);
 
             if (rev == null) {
                 return NotFound();
@@ -97,8 +97,8 @@ namespace IngatlanApi.Controllers
         /// <returns>204 No Content (siker esetén) vagy 401 Unauthorized</returns>
         [HttpPut("{id:length(24)}")]
         [Authorize]
-        public IActionResult Update(string id, Review reviewIn) {
-            var rev  = _reviewService.Get(id).Result;
+        public async Task<IActionResult> Update(string id, Review reviewIn) {
+            var rev  = await _reviewService.Get(id);
 
             if (rev == null) {
                 return NotFound();
@@ -124,8 +124,8 @@ namespace IngatlanApi.Controllers
         /// <returns>A törölt objektum</returns>
         [HttpDelete("{id:length(24)}")]
         [Authorize]
-        public ActionResult<Review> Delete(string id) {
-            var rev = _reviewService.Get(id).Result;
+        public async Task<ActionResult<Review>> Delete(string id) {
+            var rev = await _reviewService.Get(id);
 
             if (rev == null) {
                 return NotFound();

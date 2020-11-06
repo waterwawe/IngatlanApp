@@ -32,7 +32,7 @@ export default function Messages({ match }) {
     }, [activeUser])
 
     return (
-        <div className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center mt-2">
             <Card className="col-md-11 col-lg-9" bg="light" variant="light">
                 <Card.Body className="messages-container">
                     {users.length === 0 ? "You haven't recieved any messages yet." : <><UserList userlist={users} activeUser={activeUser} refresh={refresh} />

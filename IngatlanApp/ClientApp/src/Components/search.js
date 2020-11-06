@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Form, ListGroup } from 'react-bootstrap';
 import EstateList from './EstateList';
-import {AdvertisementTypes, ApiCallItem, estatetypes } from '../Api';
+import { AdvertisementTypes, estatetypes } from '../Api';
+import { getCities, getDistricts } from '../Services/EstateService';
 
 export default function Search() {
   const [adType, setAdType] = useState(0);
@@ -49,28 +50,20 @@ export default function Search() {
     return Array(+digits.join("") + 1).join("M") + roman;
   }
 
-  const getCities = async () => {
-    const response = await fetch(`${ApiCallItem}/cities`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
-    const json = await response.json();
-    setCities(json);
+  const getCitiesFromApi = async () => {
+    const response = await getCities();
+    if (response.ok) {
+      const json = await response.json();
+      setCities(json);
+    }
   }
 
-  const getDistricts = async () => {
-    const response = await fetch(`${ApiCallItem}/districts`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
-    const json = await response.json();
-    setDistricts(json);
+  const getDistrictsFromApi = async () => {
+    const response = await getDistricts();
+    if (response.ok) {
+      const json = await response.json();
+      setDistricts(json);
+    }
   }
 
   const searchestates = (desc) => {
@@ -83,7 +76,7 @@ export default function Search() {
       queryObject.descriptionContains = descContains.split(" ");
     }
 
-    if(adType){
+    if (adType) {
       queryObject.advertisementType = parseInt(adType);
     }
 
@@ -102,7 +95,6 @@ export default function Search() {
     if (priceTo)
       queryObject.priceTo = priceTo;
 
-    console.log(queryObject);
     setSearchObj(queryObject);
   }
 
@@ -133,8 +125,8 @@ export default function Search() {
       searchestates();
     }
     else {
-      getCities();
-      getDistricts();
+      getCitiesFromApi();
+      getDistrictsFromApi();
       searchestates();
     }
 
@@ -196,7 +188,7 @@ export default function Search() {
             </ListGroup.Item>
           </ListGroup>
         </Card>
-        <EstateList queryobj={searchObj}/>
+        <EstateList queryobj={searchObj} />
       </Card>
     </div>
   )
