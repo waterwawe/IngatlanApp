@@ -27,7 +27,7 @@ export default function MyNavbar({ loggedinState, username }) {
               <NavDropdown.Item href="/#/messages">My messages</NavDropdown.Item>
               <NavDropdown.Item href="/#/profile">Edit profile</NavDropdown.Item>
               <NavDropdown.Item href="/#/manage">Manage my houses</NavDropdown.Item>
-              <NavDropdown.Item href="/#/newingatlan">Upload a new ad</NavDropdown.Item>
+              <NavDropdown.Item href="/#/newestate">Upload a new ad</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="/#/logout">Logout</NavDropdown.Item>
             </DropdownButton> :

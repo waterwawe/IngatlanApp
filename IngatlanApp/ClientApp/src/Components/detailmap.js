@@ -9,12 +9,12 @@ const mapStyles = {
 
 var count = 0;
 
-export function MapContainer({ ingatlans, google, center }) {
+export function MapContainer({ estates, google, center }) {
   const [activeMarker, setActiveMarker] = useState();
   let history = useHistory();
 
   const onMarkerClick = (id) => {
-    history.push(`/ingatlan/${id}`)
+    history.push(`/estate/${id}`)
   };
 
   const onClose = () => {
@@ -50,15 +50,15 @@ export function MapContainer({ ingatlans, google, center }) {
       zoom={16}
       style={mapStyles}
       initialCenter={center}>
-      {ingatlans.map((ingatlan) => {
+      {estates.map((estate) => {
         return (
           
             <Marker
-              onClick={e => {onMarkerClick(ingatlan.id)}}
-              key={ingatlan.id + "marker"}
+              onClick={e => {onMarkerClick(estate.id)}}
+              key={estate.id + "marker"}
               position={{
-                lat: ingatlan.address.latitude,
-                lng: ingatlan.address.longitude
+                lat: estate.address.latitude,
+                lng: estate.address.longitude
               }}
             >
             </Marker>
@@ -71,7 +71,7 @@ export function MapContainer({ ingatlans, google, center }) {
 export default GoogleApiWrapper(
   (props) => ({
     apiKey: "AIzaSyApJurg5jDh3TeApK0pe9zIDuKSfaf7p94",
-    ingatlan: props.ingatlans,
+    estate: props.estates,
     center: props.center,
   }
   ))(MapContainer)

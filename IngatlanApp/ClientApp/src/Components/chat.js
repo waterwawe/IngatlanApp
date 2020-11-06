@@ -1,7 +1,7 @@
-import React,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
-import { ApiCallMessage } from '../Api';
-import {Form,Spinner,Button,Row} from 'react-bootstrap';
+import { getMessagesWith, postMessage } from '../Services/MessageService';
+import { Form, Spinner, Button, Row } from 'react-bootstrap';
 
 export default function Chat({ otherUser }) {
 
@@ -12,40 +12,24 @@ export default function Chat({ otherUser }) {
     const getMessages = async () => {
 
         setLoading(true);
-        const response = await fetch(`${ApiCallMessage}?otheruser=${otherUser}`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            method: 'GET'
-        });
+        const response = await getMessagesWith(otherUser);
         if (response.ok) {
             const json = await response.json();
             let dateParsed = [];
-            json.map((message) =>{
+            json.map((message) => {
                 let date = new Date(message.timeSent);
                 let newMessage = message;
                 newMessage.timeSent = date;
                 dateParsed.push(newMessage);
             });
             setMessages(dateParsed);
-            
         }
         setLoading(false);
     }
 
     const send = async (event) => {
         event.preventDefault();
-        const response = await fetch(`${ApiCallMessage}?to=${otherUser}`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            method: 'POST',
-            body: JSON.stringify(message)
-        });
+        const response = await postMessage(otherUser, message);
         if (response.ok) {
             getMessages();
         }
@@ -62,14 +46,14 @@ export default function Chat({ otherUser }) {
                 Messages with {otherUser}
             </Card.Title>
             <Card.Body>
-            <Card>
+                <Card>
                     <Card.Title>
                         Send a new message
                     </Card.Title>
                     <Card.Body>
                         <Form onSubmit={send}>
                             <Row className="ml-3">
-                                <Form.Control as="textarea" rows="2" placeholder="Enter message here" value={message} onChange={e=>{ setMessage(e.target.value)}} />
+                                <Form.Control as="textarea" rows="2" placeholder="Enter message here" value={message} onChange={e => { setMessage(e.target.value) }} />
                                 <Button className="mt-2" variant="primary" type="submit" disabled={isLoading}>
                                     {isLoading ? <><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" />Loading...</> : <>Submit</>}
                                 </Button>
@@ -87,8 +71,8 @@ export default function Chat({ otherUser }) {
                                 {message.text}
                             </Card.Body>
                             <Card.Footer>
-                                sent at: {("0" + message.timeSent.getDate()).slice(-2) + "-" + ("0"+(message.timeSent.getMonth()+1)).slice(-2) + "-" +
-    message.timeSent.getFullYear() + " " + ("0" + message.timeSent.getHours()).slice(-2) + ":" + ("0" + message.timeSent.getMinutes()).slice(-2)}
+                                sent at: {("0" + message.timeSent.getDate()).slice(-2) + "-" + ("0" + (message.timeSent.getMonth() + 1)).slice(-2) + "-" +
+                                    message.timeSent.getFullYear() + " " + ("0" + message.timeSent.getHours()).slice(-2) + ":" + ("0" + message.timeSent.getMinutes()).slice(-2)}
                             </Card.Footer>
                         </Card>
                     );

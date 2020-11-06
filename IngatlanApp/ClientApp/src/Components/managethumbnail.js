@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import house from './pics/house.PNG';
 import { ApiCallItem, ApiCallImage } from '../Api';
 
-export default function IngatlanThumbnail({ ingatlan }) {
+export default function EstateThumbnail({ estate }) {
 
     const [thumbnail, setThumbnail] = useState();
     const [viewCount, setViewCount] = useState(0);
@@ -34,9 +34,9 @@ export default function IngatlanThumbnail({ ingatlan }) {
 
     const getThumbnail = async () => {
         if (!done) {
-            if (ingatlan.images) {
-                if (ingatlan.images.length > 0) {
-                    await fetch(`${ApiCallImage}/${ingatlan.images[0]}`, {
+            if (estate.images) {
+                if (estate.images.length > 0) {
+                    await fetch(`${ApiCallImage}/${estate.images[0]}`, {
                         method: 'GET',
                         credentials: 'include',
                         headers: {
@@ -49,7 +49,7 @@ export default function IngatlanThumbnail({ ingatlan }) {
                 }
             }
             
-            const response = await fetch(`${ApiCallItem}/viewcount/?id=${ingatlan.id}`, {
+            const response = await fetch(`${ApiCallItem}/viewcount/?id=${estate.id}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -70,13 +70,13 @@ export default function IngatlanThumbnail({ ingatlan }) {
 
     return (
         <Card className="manage-list-card">
-            <Card.Title>{ingatlan.title}</Card.Title>
+            <Card.Title>{estate.title}</Card.Title>
             <Card.Body className="justify-content-start">
-                <Image src={ingatlan.images ? ingatlan.images.length > 0 ? thumbnail : house : house} fluid thumbnail />
-                <Row><b>Address: </b> {`${titleCase(ingatlan.address.city)}, ${romanize(ingatlan.address.district)} ,${titleCase(ingatlan.address.streetName)}`}</Row>
-                <Row><b>Price: </b> {ingatlan.price} M. Ft.</Row>
+                <Image src={estate.images ? estate.images.length > 0 ? thumbnail : house : house} fluid thumbnail />
+                <Row><b>Address: </b> {`${titleCase(estate.address.city)}, ${romanize(estate.address.district)} ,${titleCase(estate.address.streetName)}`}</Row>
+                <Row><b>Price: </b> {estate.price} M. Ft.</Row>
                 <Row><b>Views:</b>{viewCount}</Row>
-                <Link to={`/ingatlan/${ingatlan.id}/edit`}><Button variant="primary">Edit</Button></Link>
+                <Link to={`/estate/${estate.id}/edit`}><Button variant="primary">Edit</Button></Link>
             </Card.Body>
         </Card>
     )

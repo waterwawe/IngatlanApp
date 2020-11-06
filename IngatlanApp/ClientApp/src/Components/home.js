@@ -7,8 +7,8 @@ import NewHouse from './pics/newhouse.jpg'
 export default function Home() {
     
     return (
-      <Container className="ingatlan-slider-container">
-        <Carousel className="ingatlan-slider col-sm-11 col-md-9 col-lg-7">
+      <Container className="estate-slider-container">
+        <Carousel className="estate-slider col-sm-11 col-md-9 col-lg-7">
   <Carousel.Item>
     <Image
       src={NewHouse}

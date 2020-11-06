@@ -48,8 +48,8 @@ export default function Register({signIn, isLoggedin}){
     }
 
     return(
-    <div className="ingatlan-list">{isLoggedin? <Redirect to="/profile" />:
-      <Card className="ingatlan-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
+    <div className="estate-list">{isLoggedin? <Redirect to="/profile" />:
+      <Card className="estate-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
         <Card.Title>Register</Card.Title>
         <Card.Body>
         <Form onSubmit={handleSubmit}>

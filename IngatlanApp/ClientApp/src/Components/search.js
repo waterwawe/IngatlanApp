@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Form, ListGroup } from 'react-bootstrap';
-import IngatlanList from './ingatlanlist';
-import {AdvertisementTypes, ApiCallItem, Ingatlantypes } from '../Api';
+import EstateList from './EstateList';
+import {AdvertisementTypes, ApiCallItem, estatetypes } from '../Api';
 
 export default function Search() {
   const [adType, setAdType] = useState(0);
@@ -73,7 +73,7 @@ export default function Search() {
     setDistricts(json);
   }
 
-  const searchIngatlans = (desc) => {
+  const searchestates = (desc) => {
     let queryObject = {};
 
     if (desc) {
@@ -94,7 +94,7 @@ export default function Search() {
       queryObject.district = district;
 
     if (types)
-      queryObject.ingatlantype = types;
+      queryObject.estatetype = types;
 
     if (priceFrom)
       queryObject.priceFrom = priceFrom;
@@ -119,23 +119,23 @@ export default function Search() {
     else
       typelist.push(e.target.value);
     setTypes(typelist);
-    searchIngatlans();
+    searchestates();
   };
 
   const handleChange = (value) => {
-    searchIngatlans(value);
+    searchestates(value);
   }
 
   const debounceHandleChange = React.useCallback(debounce(handleChange, 370), []);
 
   useEffect(() => {
     if (city || district || priceFrom || priceTo) {
-      searchIngatlans();
+      searchestates();
     }
     else {
       getCities();
       getDistricts();
-      searchIngatlans();
+      searchestates();
     }
 
   }, [city, district, priceFrom, priceTo, adType])
@@ -186,17 +186,17 @@ export default function Search() {
               <Form.Group>
                 <Form.Label> Select desired estate types</Form.Label>
                 <Form.Control className="" as="select" multiple value={types} onChange={onMultipleSelectChange}>
-                  <option value="1">{Ingatlantypes(1)}</option>
-                  <option value="2">{Ingatlantypes(2)}</option>
-                  <option value="3">{Ingatlantypes(3)}</option>
-                  <option value="4">{Ingatlantypes(4)}</option>
-                  <option value="5">{Ingatlantypes(5)}</option>
+                  <option value="1">{estatetypes(1)}</option>
+                  <option value="2">{estatetypes(2)}</option>
+                  <option value="3">{estatetypes(3)}</option>
+                  <option value="4">{estatetypes(4)}</option>
+                  <option value="5">{estatetypes(5)}</option>
                 </Form.Control>
               </Form.Group>
             </ListGroup.Item>
           </ListGroup>
         </Card>
-        <IngatlanList queryobj={searchObj}/>
+        <EstateList queryobj={searchObj}/>
       </Card>
     </div>
   )

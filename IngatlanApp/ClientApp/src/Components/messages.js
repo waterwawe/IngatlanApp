@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ApiCallMessage } from '../Api';
-import UserList from './userlist';
-import Chat from './chat';
+import { getUsers } from '../Services/MessageService';
+import UserList from './UserList';
+import Chat from './Chat';
 import { Card } from 'react-bootstrap';
 
 export default function Messages({ match }) {
-    //Állapotváltozók
+
     const [activeUser, setActiveUser] = useState("");
     const [users, setUsers] = useState([]);
 
-    const getUsers = async () => {
-        const response = await fetch(`${ApiCallMessage}/users`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            method: 'GET'
-        });
+    const getOtherUsers = async () => {
+        const response = await getUsers();
         if (response.ok) {
             const json = await response.json();
             setUsers(json);
@@ -35,7 +28,7 @@ export default function Messages({ match }) {
 
     useEffect(() => {
         //Felhasználók listájának lekérése az API-tól.
-        getUsers();
+        getOtherUsers();
     }, [activeUser])
 
     return (

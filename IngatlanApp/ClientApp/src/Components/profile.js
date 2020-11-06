@@ -24,8 +24,8 @@ export default function Profile({ isSignedin }) {
     }, [isSignedin])
 
     return (
-        <div className="ingatlan-list">{isSignedin ?
-            <Card className="ingatlan-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
+        <div className="estate-list">{isSignedin ?
+            <Card className="estate-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
                 <Card.Title>{user.userName}'s profile</Card.Title>
                 <Card.Body className="justify-content-start">
                     <Row><p><b>Username: </b> {user.userName}</p></Row>

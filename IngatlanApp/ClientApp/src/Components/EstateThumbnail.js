@@ -2,9 +2,9 @@ import React,{useState,useEffect} from 'react';
 import {Button,Card,Row,Image, ListGroup} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import house from './pics/house.PNG';
-import {Ingatlantypes,ApiCallImage} from '../Api';
+import {estatetypes,ApiCallImage} from '../Api';
 
-export default function IngatlanThumbnail({ingatlan}){
+export default function EstateThumbnail({estate}){
 
     const[thumbnail, setThumbnail] = useState();
     const[done, setDone] = useState(false);
@@ -32,10 +32,10 @@ export default function IngatlanThumbnail({ingatlan}){
     }
 
     const getThumbnail = async () =>{
-        if(ingatlan.images){
-            if(ingatlan.images.length > 0){
+        if(estate.images){
+            if(estate.images.length > 0){
                 if(!done){
-                    const response = await fetch(`${ApiCallImage}/${ingatlan.images[0]}`, {
+                    const response = await fetch(`${ApiCallImage}/${estate.images[0]}`, {
                         method: 'GET', 
                         credentials: 'include',
                         headers: {
@@ -56,22 +56,22 @@ export default function IngatlanThumbnail({ingatlan}){
     }, [])
 
     return(
-        <Card className="ingatlan-list-card">
-            <Card.Title>{ingatlan.title}</Card.Title>
+        <Card className="estate-list-card">
+            <Card.Title>{estate.title}</Card.Title>
             <Card.Body className ="justify-content-center">
                 <ListGroup horizontal>
                 <ListGroup.Item className="col-sm-3 col-md-4 col-lg-5">
-                    <Image className="ingatlan-list-card-image" src={ingatlan.images?ingatlan.images.length>0?thumbnail:house:house} fluid thumbnail />
+                    <Image className="estate-list-card-image" src={estate.images?estate.images.length>0?thumbnail:house:house} fluid thumbnail />
                 </ListGroup.Item>
                 <ListGroup.Item className="justify-content-start col-sm-6 col-md-5 col-lg-4">
-                    <Row><b>Address: </b> {`${titleCase(ingatlan.address.city)}, ${romanize(ingatlan.address.district)} ,${titleCase(ingatlan.address.streetName)}`}</Row>
-                    <Row><b>Type: </b> {Ingatlantypes(ingatlan.ingatlanType)}</Row>
-                    <Row><b> Owner: </b> {ingatlan.ownerUsername}</Row>
-                    <Row><b>Price: <span> &nbsp; </span></b> {ingatlan.price} {ingatlan.advertisementType === 1?"M Ft.": ingatlan.advertisementType === 2? "Ft. / month": "Ft. / day"}</Row>
+                    <Row><b>Address: </b> {`${titleCase(estate.address.city)}, ${romanize(estate.address.district)} ,${titleCase(estate.address.streetName)}`}</Row>
+                    <Row><b>Type: </b> {estatetypes(estate.estateType)}</Row>
+                    <Row><b> Owner: </b> {estate.ownerUsername}</Row>
+                    <Row><b>Price: <span> &nbsp; </span></b> {estate.price} {estate.advertisementType === 1?"M Ft.": estate.advertisementType === 2? "Ft. / month": "Ft. / day"}</Row>
                 </ListGroup.Item>
                 <ListGroup.Item className="col-sm-3 col-md-3 col-lg-3">
-                <Link to={`/ingatlan/${ingatlan.id}`}><Button className="ingatlan-list-button" variant="primary">Read more</Button></Link>
-                <Link to={`/profile/${ingatlan.ownerUsername}`}><Button className="ingatlan-list-button" variant="primary">Owner's profile</Button></Link>
+                <Link to={`/estate/${estate.id}`}><Button className="estate-list-button" variant="primary">Read more</Button></Link>
+                <Link to={`/profile/${estate.ownerUsername}`}><Button className="estate-list-button" variant="primary">Owner's profile</Button></Link>
                 </ListGroup.Item>
                 </ListGroup>
             </Card.Body>

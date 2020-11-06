@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { ApiCallAccount, ApiCallItem } from '../Api';
 import { Container, Alert } from 'react-bootstrap';
-import ManageThumbnail from './managethumbnail';
+import ManageThumbnail from './Managethumbnail';
 
 export default function Manage() {
 
-    const [ingatlans, setIngatlans] = useState([]);
+    const [estates, setestates] = useState([]);
     const [done, setDone] = useState(false);
     const [error, setError] = useState(false);
 
-    const getIngatlans = async () => {
+    const getestates = async () => {
         let username;
 
         const response = await fetch(ApiCallAccount + "/isloggedin", {
@@ -39,7 +39,7 @@ export default function Manage() {
                     if (response.ok) {
                         setError(false);
                         const json = await response.json();
-                        setIngatlans(json);
+                        setestates(json);
                         setDone(true);
                     }
                     else {
@@ -53,13 +53,13 @@ export default function Manage() {
     }
 
     useEffect(() => {
-        getIngatlans();
+        getestates();
     }, [])
 
     return (
-        <Container className="ingatlan-manage-list">
-            {error ? <Alert show={true}>No matches found</Alert> : ingatlans.map((ingatlan) => {
-                return (<ManageThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
+        <Container className="estate-manage-list">
+            {error ? <Alert show={true}>No matches found</Alert> : estates.map((estate) => {
+                return (<ManageThumbnail key={estate.id} estate={estate} />);
             })}
         </Container>
     );

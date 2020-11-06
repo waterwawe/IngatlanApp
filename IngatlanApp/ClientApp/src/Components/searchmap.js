@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { ApiCallItem } from '../Api';
 import { Card } from 'react-bootstrap';
-import Map from './detailmap';
+import Map from './DetailMap';
 
 export default function SearchMap() {
 
     const [latitude, setLatitude] = useState();
     const [longitude, setLongitude] = useState();
-    const [ingatlans, setIngatlans] = useState([]);
+    const [estates, setestates] = useState([]);
 
     const distance = 1;
 
-    const getIngatlans = async (coords) => {
+    const getestates = async (coords) => {
         console.log(coords);
         const response = await fetch(`${ApiCallItem}/bylocation?longitude=${coords.longitude}&latitude=${coords.latitude}&distance=${distance}`, {
             method: 'GET',
@@ -22,7 +22,7 @@ export default function SearchMap() {
         });
         if (response.ok) {
             const data = await response.json();
-            setIngatlans(data);
+            setestates(data);
         }
     }
 
@@ -33,7 +33,7 @@ export default function SearchMap() {
                 const coords = pos.coords;
                 setLongitude(coords.longitude);
                 setLatitude(coords.latitude);
-                getIngatlans(coords);
+                getestates(coords);
             });
         }
     }
@@ -50,7 +50,7 @@ export default function SearchMap() {
                 <Map center={{
                     lat: latitude,
                     lng: longitude
-                }} ingatlans={ingatlans} />
+                }} estates={estates} />
                 </Card.Body>
             </Card>
         </div>

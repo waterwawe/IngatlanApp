@@ -33,8 +33,8 @@ export default function Login({isLoggedin, signIn}){
     }, [isLoggedin,signIn])
     
     return(isLoggedin?<Redirect to="/profile" /> :
-    <div className="ingatlan-list">
-    <Card className="ingatlan-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
+    <div className="estate-list">
+    <Card className="estate-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
         <Card.Title>Login</Card.Title>
         <Card.Body>
         <Alert variant="danger" show={failed}>

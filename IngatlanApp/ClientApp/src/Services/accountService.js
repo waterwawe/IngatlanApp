@@ -1,7 +1,7 @@
 import { ApiCallAccount } from '../Api'
 
 export const getLoggedIn = async () => {
-    const response = await fetch(ApiCallAccount + "/isloggedin", {
+    return await fetch(ApiCallAccount + "/isloggedin", {
         method: 'GET',
         credentials: 'include',
         headers: {

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ApiCallAccount, ApiCallItem, ApiCallImage, Ingatlantypes } from '../Api';
+import { estatetypes } from '../Api';
+import { getLoggedIn } from '../Services/AccountService';
+import { deleteEstate, uploadImageToEstate, getEstateById, updateEstate, highlightEstate, removeImageFromEstate } from '../Services/EstateService';
+import { getImage } from '../Services/ImageService';
 import { Alert, Container, Row, Popover, OverlayTrigger, ListGroup, Form, Card, Modal, Spinner, Button, Badge } from 'react-bootstrap';
 import { Redirect, Link } from 'react-router-dom';
-import Map from './editmap';
+import Map from './EditMap';
 
 export default function Edit({ match }) {
   const [file, setFile] = useState();
@@ -36,16 +39,7 @@ export default function Edit({ match }) {
   const showTextArea = () => setDisplayTextArea(true);
 
   const getUser = async () => {
-    const response = await fetch(ApiCallAccount + "/isloggedin", {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'Accept-Encoding': 'gzip, deflate, br'
-      }
-    });
+    const response = await getLoggedIn();
     const data = await response.json();
     setUsername(data.userName);
   }
@@ -81,13 +75,7 @@ export default function Edit({ match }) {
   }
 
   const getDetails = async () => {
-    const response = await fetch(`${ApiCallItem}/${match.params.id}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await getEstateById(match.params.id);
 
     if (response.ok) {
       const data = await response.json();
@@ -105,13 +93,7 @@ export default function Edit({ match }) {
           if (!done) {
             let imgtemp = [];
             data.images.map(async (image) => {
-              const response = await fetch(`${ApiCallImage}/${image}`, {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              }).then(response => response.blob())
+              await getImage(image)
                 .then(imgs => {
                   imgtemp = imgtemp.concat({ name: image, url: URL.createObjectURL(imgs) });
                   setImages(imgtemp);
@@ -128,20 +110,12 @@ export default function Edit({ match }) {
     setLongitude(parseFloat(lng));
     setLatitude(parseFloat(lat));
     setLoading(true);
-    let ingatlan = JSON.parse(JSON.stringify(details));
+    let estate = JSON.parse(JSON.stringify(details));
     if (lng && lat)
-      ingatlan.address.longitude = parseFloat(lng);
-    ingatlan.address.latitude = parseFloat(lat);
-    console.log(ingatlan);
+      estate.address.longitude = parseFloat(lng);
+    estate.address.latitude = parseFloat(lat);
 
-    const response = await fetch(`${ApiCallItem}/${details.id}`, {
-      method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(ingatlan)
-    });
+    await updateEstate(details.id, estate)
     setLoading(false);
   }
 
@@ -150,38 +124,19 @@ export default function Edit({ match }) {
     setLoading(true);
     const formData = new FormData();
     formData.append("File", file);
-    console.log(formData);
-    console.log(file);
 
-    const response = await fetch(`${ApiCallItem}/${match.params.id}`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Accept': '*/*',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-      },
-      body: formData
-    });
+    const response = await uploadImageToEstate(match.params.id, formData);
     if (response.ok) {
       setSuccess(true);
       const data = await response.json();
       setDetails(data);
-      getImage(data.images);
+      getImages(data.images);
     }
     setLoading(false);
   }
 
   const removeImage = async () => {
-
-    const response = await fetch(`${ApiCallItem}/image?name=${selected.name}&id=${match.params.id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-      }
-    });
+    const response = await removeImageFromEstate(match.params.id, selected.name);
     if (response.ok) {
       const index = images.indexOf(selected);
       if (index > -1) {
@@ -189,23 +144,14 @@ export default function Edit({ match }) {
       }
       setSuccess(true);
     }
-
     setShow(false);
   }
 
-  const removeIngatlan = async () => {
-    const response = await fetch(`${ApiCallItem}/${match.params.id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-      }
-    });
+  const removeEstate = async () => {
+    const response = await deleteEstate(match.params.id);
     if (response.ok) {
       setRedirect(true);
     }
-
     handleCloseDelete();
   }
 
@@ -214,29 +160,17 @@ export default function Edit({ match }) {
   }
 
   const highlight = async (type) => {
-    const response = await fetch(`${ApiCallItem}/${details.id}/highlight?highlightType=${type}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await highlightEstate(match.params.id, type);
     if (response.ok) {
       handleCloseHighlight();
       setSuccess(true);
     }
   }
 
-  const getImage = async (imgarray) => {
+  const getImages = async (imgarray) => {
     let imgtemp = [];
     imgarray.map(async (image) => {
-      const response = await fetch(`${ApiCallImage}/${image}`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response => response.blob())
+     await getImage(image)
         .then(imgs => {
           imgtemp = imgtemp.concat({ name: image, url: URL.createObjectURL(imgs) });
           setImages(imgtemp);
@@ -255,22 +189,15 @@ export default function Edit({ match }) {
     }
   }
 
-  const updateIngatlan = async (e) => {
+  const updateestate = async (e) => {
     e.preventDefault();
     setLoading(true);
-    let ingatlan = JSON.parse(JSON.stringify(details));
-    ingatlan.title = title;
-    ingatlan.price = parseFloat(price);
-    ingatlan.description = description;
+    let estate = JSON.parse(JSON.stringify(details));
+    estate.title = title;
+    estate.price = parseFloat(price);
+    estate.description = description;
 
-    const response = await fetch(`${ApiCallItem}/${details.id}`, {
-      method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(ingatlan)
-    });
+    await updateEstate(match.params.id,estate);
     setLoading(false);
 
   }
@@ -279,7 +206,7 @@ export default function Edit({ match }) {
     <Popover id="popover-basic">
       <Popover.Title className="edit-list-item" as="h3">Edit title</Popover.Title>
       <Popover.Content>
-        <Form onSubmit={updateIngatlan}>
+        <Form onSubmit={updateestate}>
           <Form.Control className="edit-list-item" value={title} onChange={e => { setTitle(e.target.value) }} />
           <Button className="edit-list-item" type="submit">Change</Button>
         </Form>
@@ -291,7 +218,7 @@ export default function Edit({ match }) {
     <Popover id="popover-basic">
       <Popover.Title className="edit-list-item" as="h3">Edit price</Popover.Title>
       <Popover.Content>
-        <Form onSubmit={updateIngatlan}>
+        <Form onSubmit={updateestate}>
           <Row><Form.Control className="edit-list-item col-4" type="number" min="0" step="0.1" placeholder="XX.XX" value={price} onChange={e => { setPrice(e.target.value); }} /> M. Ft.</Row>
           <Button className="edit-list-item" type="submit">Change</Button>
         </Form>
@@ -334,7 +261,7 @@ export default function Edit({ match }) {
               <Button variant="secondary" onClick={handleCloseDelete}>
                 Cancel
                       </Button>
-              <Button variant="danger" onClick={removeIngatlan}>
+              <Button variant="danger" onClick={removeEstate}>
                 Delete
                     </Button>
             </Modal.Footer>
@@ -344,7 +271,7 @@ export default function Edit({ match }) {
               <Modal.Title>Edit description</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form onSubmit={updateIngatlan}>
+              <Form onSubmit={updateestate}>
                 <Form.Control as="textarea" rows="3" value={description} onChange={e => { setDescription(e.target.value) }} />
                 <Button className="edit-list-item" type="submit">Change</Button>
               </Form>
@@ -401,7 +328,7 @@ export default function Edit({ match }) {
               </Row>
             </Card.Body>
           </Card>
-          <Card className="ingatlan-detail-card mt-2 mb-2">
+          <Card className="estate-detail-card mt-2 mb-2">
             <Card.Body>
               <ListGroup className="edit-list">
                 <ListGroup.Item>
@@ -414,9 +341,9 @@ export default function Edit({ match }) {
                         <Badge variant="primary" className="edit-button">Edit</Badge>
                       </OverlayTrigger></Row>
                   </ListGroup.Item> : <></>}
-                {details.ingatlanType ?
+                {details.estateType ?
                   <ListGroup.Item>
-                    <Row><b>Type: <span> &nbsp; </span></b> {Ingatlantypes(details.ingatlanType)}</Row>
+                    <Row><b>Type: <span> &nbsp; </span></b> {estatetypes(details.estateType)}</Row>
                   </ListGroup.Item> : <></>}
                 {details.price ?
                   <ListGroup.Item>

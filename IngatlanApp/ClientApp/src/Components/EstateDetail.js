@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ApiCallAccount, ApiCallItem, Ingatlantypes, ApiCallImage, AdvertisementTypes } from '../Api';
+import { estatetypes, AdvertisementTypes } from '../Api';
 import house from './pics/house.PNG';
 import { Carousel, Modal, Button, Card, ListGroup, Container, Image, Row } from 'react-bootstrap';
-import Map from './detailmap';
+import Map from './DetailMap';
 import { Link } from 'react-router-dom';
-import { getIngatlanDetails } from '../Services/ingatlanService';
-import { getImage } from '../Services/imageService';
-import { getLoggedIn } from '../Services/accountService'
+import { getEstateById } from '../Services/EstateService';
+import { getImage } from '../Services/ImageService';
 
 export default function Details({ match }) {
 
@@ -44,7 +43,7 @@ export default function Details({ match }) {
 
   const getDetails = async () => {
 
-    const response = await getIngatlanDetails(match.params.id);
+    const response = await getEstateById(match.params.id);
     if (response.ok) {
       const data = await response.json();
       setDetails(data);
@@ -96,7 +95,7 @@ export default function Details({ match }) {
         </Modal.Footer>
       </Modal>
       <Container className="mt-2 mb-2 text-center col-sm-11 col-md-10 col-lg-8">
-        <Card className="ingatlan-detail-card" bg="light">
+        <Card className="estate-detail-card" bg="light">
           <Card.Body className="text-center mt-2">
             <Card.Title>{details.title}</Card.Title>
             <Carousel className="detail-image-carousel col-sm-11 col-md-10 col-lg-8">
@@ -112,9 +111,9 @@ export default function Details({ match }) {
               }) : <Image src={house} fluid thumbnail />}
             </Carousel>
             <ListGroup className="mt-2">
-              {details.ingatlanType ?
+              {details.estateType ?
                 <ListGroup.Item>
-                  <Row><b>Type: <span> &nbsp; </span></b> {Ingatlantypes(details.ingatlanType)}, {AdvertisementTypes(details.advertisementType)}</Row>
+                  <Row><b>Type: <span> &nbsp; </span></b> {estatetypes(details.estateType)}, {AdvertisementTypes(details.advertisementType)}</Row>
                 </ListGroup.Item> : <></>}
               {details.price ?
                 <ListGroup.Item>
@@ -148,7 +147,7 @@ export default function Details({ match }) {
               <Map center={{
                 lat: details.address.latitude,
                 lng: details.address.longitude
-              }} ingatlans={[details]} />
+              }} estates={[details]} />
             </Card.Body>
           </Card> : <></>
           : <></>

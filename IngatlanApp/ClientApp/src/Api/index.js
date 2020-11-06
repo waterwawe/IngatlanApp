@@ -7,7 +7,7 @@ export const ApiCallMessage = "/api/message";
 export const AdvertisementTypes = (value) => {
   switch(value) {
       case 0:
-        return "Unkown";
+        return "Unknown";
       case 1:
         return "For sale"
       case 2:
@@ -15,14 +15,14 @@ export const AdvertisementTypes = (value) => {
       case 3:
           return "AirBnB"
       default:
-        return "Unkown"
+        return "Unknown"
     }
 }
 
-export const Ingatlantypes = (value) => {
+export const estatetypes = (value) => {
     switch(value) {
         case 0:
-          return "Unkown";
+          return "Unknown";
         case 1:
           return "Detached House"
         case 2:
@@ -40,7 +40,7 @@ export const Ingatlantypes = (value) => {
 export const Streettypes = (value) => {
     switch(value) {
         case 0:
-          return "Unkown";
+          return "Unknown";
         case 1:
           return "street"
         case 2:
@@ -48,7 +48,7 @@ export const Streettypes = (value) => {
         case 3:
             return "road"
         default:
-          return "Unkown"
+          return "Unknown"
       }
 }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ApiCallAccount, ApiCallReview, Reviewtypes } from '../Api';
 import { Alert, Form, Spinner, Button, Collapse, Card, Row, ProgressBar, Container, ListGroup } from 'react-bootstrap';
-import IngatlanList from './ingatlanlist';
+import estateList from './EstateList';
 import {Link} from 'react-router-dom';
 
 export default function Profile({ isSignedin, userName, match }) {
@@ -112,8 +112,8 @@ export default function Profile({ isSignedin, userName, match }) {
     }, [])
 
     return (
-        <div className="ingatlan-list">
-            <Card className="ingatlan-list-card justify-content-space-between col-sm-11 col-md-9 col-lg-7">
+        <div className="estate-list">
+            <Card className="estate-list-card justify-content-space-between col-sm-11 col-md-9 col-lg-7">
                 <Card.Title>{user.userName}'s profile</Card.Title>
                 <Card.Body className="justify-content-start">
                     <Row><p><b>Username:</b> {user.userName}</p></Row>
@@ -122,7 +122,7 @@ export default function Profile({ isSignedin, userName, match }) {
                     <Row><Link to={`/messages/${user.userName}`}><p><b>Send a message!</b></p></Link></Row>
                 </Card.Body>
             </Card>
-            <Card className="ingatlan-list-card justify-content-space-between col-sm-11 col-md-9 col-lg-7">
+            <Card className="estate-list-card justify-content-space-between col-sm-11 col-md-9 col-lg-7">
                 <Card.Title>{user.userName}'s reviews</Card.Title>
                 <Card.Body >
                     <Container className="review-body">
@@ -195,10 +195,10 @@ export default function Profile({ isSignedin, userName, match }) {
                 </Card.Body>
 
             </Card>
-            <Card className="ingatlan-list-card justify-content-space-between col-sm-11 col-md-9 col-lg-7">
+            <Card className="estate-list-card justify-content-space-between col-sm-11 col-md-9 col-lg-7">
                 <Card.Title>{user.userName}'s advertisements</Card.Title>
                 <Card.Body>
-                    <IngatlanList queryobj={{ owner: match.params.username }} refresh={refresh} />
+                    <estateList queryobj={{ owner: match.params.username }} refresh={refresh} />
                 </Card.Body>
             </Card>
         </div>

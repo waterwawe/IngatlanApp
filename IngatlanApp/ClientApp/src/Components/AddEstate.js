@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { ApiCallItem, Ingatlantypes, Streettypes, AdvertisementTypes } from '../Api';
+import { estatetypes, Streettypes, AdvertisementTypes } from '../Api';
 import { Card, Spinner, ListGroup, Form, Alert, Button, Row } from 'react-bootstrap';
+import { addEstate } from '../Services/EstateService';
 
-export default function AddIngatlan({ isLoggedIn }) {
+export default function Addestate({ isLoggedIn }) {
 
     const [isLoading, setLoading] = useState(false);
     const [adType, setAdType] = useState(0);
@@ -44,27 +45,20 @@ export default function AddIngatlan({ isLoggedIn }) {
     const upload = async (e) => {
         e.preventDefault();
         setLoading(true);
-        let ingatlan = {};
-        ingatlan.title = title;
-        ingatlan.address = {};
-        ingatlan.address.city = city;
-        ingatlan.address.district = parseInt(district, 10);
-        ingatlan.address.streetName = streetName;
-        ingatlan.address.streetType = parseInt(streetType,10);
-        ingatlan.address.streetNumber = streetNumber;
-        ingatlan.advertisementType = parseInt(adType, 10);
-        ingatlan.price = parseFloat(price);
-        ingatlan.ingatlanType = parseInt(type, 10);
-        ingatlan.description = description;
+        let estate = {};
+        estate.title = title;
+        estate.address = {};
+        estate.address.city = city;
+        estate.address.district = parseInt(district, 10);
+        estate.address.streetName = streetName;
+        estate.address.streetType = parseInt(streetType, 10);
+        estate.address.streetNumber = streetNumber;
+        estate.advertisementType = parseInt(adType, 10);
+        estate.price = parseFloat(price);
+        estate.estateType = parseInt(type, 10);
+        estate.description = description;
 
-        const response = await fetch(`${ApiCallItem}`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(ingatlan)
-        });
+        const response = await addEstate(estate);
 
         if (response.ok)
             setError(false);
@@ -78,8 +72,8 @@ export default function AddIngatlan({ isLoggedIn }) {
     }, [])
 
     return (
-        <div className="ingatlan-list">{isLoggedIn ?
-            <Card className="ingatlan-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
+        <div className="estate-list">{isLoggedIn ?
+            <Card className="estate-list-card justify-content-space-between col-sm-11 col-md-8 col-lg-6">
                 <Card.Title>Upload a new estate</Card.Title>
                 <Card.Body>
                     <form onSubmit={upload}>
@@ -120,29 +114,29 @@ export default function AddIngatlan({ isLoggedIn }) {
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <Form.Label>Is your estate for sale or for rent</Form.Label>
-                                    <Row><Form.Control as="select" value={adType} onChange={e => {setTouched(true); setAdType(e.target.value)}}>
+                                    <Row><Form.Control as="select" value={adType} onChange={e => { setTouched(true); setAdType(e.target.value) }}>
                                         <option value="0">Select one</option>
                                         <option value="1">{AdvertisementTypes(1)}</option>
                                         <option value="2">{AdvertisementTypes(2)}</option>
                                         <option value="3">{AdvertisementTypes(3)}</option>
                                     </Form.Control></Row>
                                 </ListGroup.Item>
-                                {adType != 0? <ListGroup.Item>
+                                {parseInt(adType) !== 0 ? <ListGroup.Item>
                                     <Form.Label>Your desired price</Form.Label>
-                                    <Row>{adType == 1 ? <><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="0.1" placeholder="XX.XX" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
-                                        M. Ft. </>: adType == 2 ? <><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="1" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
-                                        Ft. / Month</>:<><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="1" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
+                                    <Row>{parseInt(adType) === 1 ? <><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="0.1" placeholder="XX.XX" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
+                                        M. Ft. </> : parseInt(adType) === 2 ? <><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="1" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
+                                        Ft. / Month</> : <><Form.Control required isInvalid={touched && price <= 0} isValid={price > 0} className="price-input ml-3 col-sm-9 col-md-6 col-lg-4" type="number" min="0" step="1" value={price} onChange={e => { setTouched(true); setPrice(e.target.value); }} />
                                         Ft. / Day</>}
                                     </Row>
-                                </ListGroup.Item>: <></>}
+                                </ListGroup.Item> : <></>}
                                 <ListGroup.Item>
                                     <Form.Label>Your estate's type</Form.Label>
                                     <Form.Control as="select" value={type} onChange={e => { setTouched(true); setType(e.target.value); }}>
-                                        <option value="1">{Ingatlantypes(1)}</option>
-                                        <option value="2">{Ingatlantypes(2)}</option>
-                                        <option value="3">{Ingatlantypes(3)}</option>
-                                        <option value="4">{Ingatlantypes(4)}</option>
-                                        <option value="5">{Ingatlantypes(5)}</option>
+                                        <option value="1">{estatetypes(1)}</option>
+                                        <option value="2">{estatetypes(2)}</option>
+                                        <option value="3">{estatetypes(3)}</option>
+                                        <option value="4">{estatetypes(4)}</option>
+                                        <option value="5">{estatetypes(5)}</option>
                                     </Form.Control>
                                 </ListGroup.Item>
                                 <ListGroup.Item>

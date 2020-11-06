@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { ApiCallItem } from '../Api'
 import { ListGroup, Alert, Pagination, Dropdown } from 'react-bootstrap'
-import IngatlanThumbnail from './ingatlanthumbnail'
+import {getEstates} from '../Services/EstateService'
+import EstateThumbnail from './EstateThumbnail'
 
-export default function IngatlanList({ queryobj }) {
+export default function EstateList({ queryobj }) {
 
   const pagesize = 10;
 
   const [searchObj, setSearchObj] = useState({});
-  const [ingatlanList, setList] = useState([]);
+  const [estateList, setList] = useState([]);
   const [highlightList, setHighlightlist] = useState([]);
   const [listToDisplay, setListToDisplay] = useState([]);
   const [error, setError] = useState(false);
@@ -21,43 +21,22 @@ export default function IngatlanList({ queryobj }) {
   const [LowToHighActive, setLowToHigh] = useState(false);
   const [HighToLowActive, setHighToLow] = useState(false);
 
-
-  const serialize = function (obj, prefix) {
-    var str = [], p;
-    for (p in obj) {
-      if (obj.hasOwnProperty(p)) {
-        var k = prefix ? prefix + "[" + p + "]" : p,
-          v = obj[p];
-        str.push((v !== null && typeof v === "object") ?
-          serialize(v, k) :
-          encodeURIComponent(k) + "=" + encodeURIComponent(v));
-      }
-    }
-    return str.join("&");
-  }
-
-  const getIngatlan = async () => {
+  const getestate = async () => {
     if (!done) {
       setSearchObj(queryobj);
-      const response = await fetch(`${ApiCallItem}/?${serialize(queryobj)}`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
+      const response = await getEstates(queryobj);
       if (response.ok) {
         setError(false);
         const json = await response.json();
         let highList = [];
         let normalList = [];
-        json.forEach(ingatlan => {
-          if (ingatlan.isHighlighted) {
-            highList.push(ingatlan);
+        json.forEach(estate => {
+          if (estate.isHighlighted) {
+            highList.push(estate);
 
           }
           else {
-            normalList.push(ingatlan);
+            normalList.push(estate);
           }
         });
         setHighlightlist(highList);
@@ -83,9 +62,9 @@ export default function IngatlanList({ queryobj }) {
   const initListToDisplay = (pagenumber, list) => {
     setCurrentPage(pagenumber);
     let newList = [];
-    list.map((ingatlan) => {
-      if ((pagenumber - 1) * pagesize < (list.indexOf(ingatlan) + 1) && (list.indexOf(ingatlan) + 1) <= (pagenumber * pagesize))
-        newList.push(ingatlan);
+    list.map((estate) => {
+      if ((pagenumber - 1) * pagesize < (list.indexOf(estate) + 1) && (list.indexOf(estate) + 1) <= (pagenumber * pagesize))
+        newList.push(estate);
     });
     setListToDisplay(newList);
   }
@@ -97,7 +76,7 @@ export default function IngatlanList({ queryobj }) {
 
     let newHighlighted = highlightList.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     setHighlightlist(newHighlighted);
-    let newList = ingatlanList.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+    let newList = estateList.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     setList(newList);
     initListToDisplay(currentPage, newList);
   }
@@ -109,7 +88,7 @@ export default function IngatlanList({ queryobj }) {
 
     let newHighlighted = highlightList.sort((a, b) => (a.price > b.price) ? 1 : -1);
     setHighlightlist(newHighlighted);
-    let newList = ingatlanList.sort((a, b) => (a.price > b.price) ? 1 : -1);
+    let newList = estateList.sort((a, b) => (a.price > b.price) ? 1 : -1);
     setList(newList);
     initListToDisplay(currentPage, newList);
   }
@@ -121,7 +100,7 @@ export default function IngatlanList({ queryobj }) {
 
     let newHighlighted = highlightList.sort((a, b) => (a.price < b.price) ? 1 : -1);
     setHighlightlist(newHighlighted);
-    let newList = ingatlanList.sort((a, b) => (a.price < b.price) ? 1 : -1);
+    let newList = estateList.sort((a, b) => (a.price < b.price) ? 1 : -1);
     setList(newList);
     initListToDisplay(currentPage, newList);
   }
@@ -129,12 +108,12 @@ export default function IngatlanList({ queryobj }) {
   useEffect(() => {
     if (queryobj !== searchObj) {
       setDone(false);
-      getIngatlan();
+      getestate();
     }
   }, [queryobj])
 
   return (
-    <div className="ingatlan-list">
+    <div className="estate-list">
       <ListGroup horizontal>
         <ListGroup.Item active={newestActive} action onClick={orderNewestFirst}>
           Newest first
@@ -151,37 +130,37 @@ export default function IngatlanList({ queryobj }) {
           <>{currentPage === 1 ?
             <>
               {highlightList.length > 0 ?  <h4> Highlighted ads</h4> : <></>}
-              {highlightList.map((ingatlan) => {
-                return (<IngatlanThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
+              {highlightList.map((estate) => {
+                return (<EstateThumbnail key={estate.id} estate={estate} />);
               })
               }
               <Dropdown.Divider/>
             </>
             : <>
             </>}
-            {listToDisplay.map((ingatlan) => {
-              return (<IngatlanThumbnail key={ingatlan.id} ingatlan={ingatlan} />);
+            {listToDisplay.map((estate) => {
+              return (<EstateThumbnail key={estate.id} estate={estate} />);
             })}</>}
       </ListGroup>
       <Pagination>
-        <Pagination.First onClick={() => { initListToDisplay(1, ingatlanList) }} />
+        <Pagination.First onClick={() => { initListToDisplay(1, estateList) }} />
         <Pagination.Prev onClick={() => {
           if (currentPage - 1 > 0)
-            initListToDisplay(currentPage - 1, ingatlanList)
+            initListToDisplay(currentPage - 1, estateList)
         }} />
         {pageNumbers.map((pagenum) => {
           if (Math.abs(currentPage - pagenum) <= 5) {
             if (currentPage === pagenum)
               return (<Pagination.Item key={pagenum} active>{pagenum}</Pagination.Item>);
             else
-              return (<Pagination.Item key={pagenum} onClick={() => { initListToDisplay(pagenum, ingatlanList) }}>{pagenum}</Pagination.Item>);
+              return (<Pagination.Item key={pagenum} onClick={() => { initListToDisplay(pagenum, estateList) }}>{pagenum}</Pagination.Item>);
           }
         })}
         <Pagination.Next onClick={() => {
           if (currentPage + 1 <= pageNumbers.length)
-            initListToDisplay(currentPage + 1, ingatlanList)
+            initListToDisplay(currentPage + 1, estateList)
         }} />
-        <Pagination.Last onClick={() => { initListToDisplay(pageNumbers.length, ingatlanList) }} />
+        <Pagination.Last onClick={() => { initListToDisplay(pageNumbers.length, estateList) }} />
       </Pagination>
     </div>
   );
