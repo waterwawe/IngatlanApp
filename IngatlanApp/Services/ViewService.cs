@@ -30,7 +30,7 @@ namespace IngatlanApi.Services {
         }
 
         public async Task<View> AddUser(string ingatlanId, string username) {
-            var view = FindByIngatlanId(ingatlanId).Result;
+            var view = await FindByIngatlanId(ingatlanId);
             view.ViewedByUsernameList.Add(username);
             await _views.ReplaceOneAsync(v=> v.Id == view.Id,view);
             return view;

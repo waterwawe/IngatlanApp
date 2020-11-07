@@ -45,17 +45,17 @@ namespace IngatlanApi.Controllers {
         /// <returns>Kért üzenetek listája</returns>
         [Authorize]
         [HttpGet]
-        public List<Message> Get([FromQuery]string otherUser, [FromQuery] bool all = true) {
+        public async Task<List<Message>> Get([FromQuery]string otherUser, [FromQuery] bool all = true) {
             if (all) {
-                var list = _messageService.FindAllByUsername(User.Identity.Name, otherUser).Result;
+                var list = await _messageService.FindAllByUsername(User.Identity.Name, otherUser);
                 if (otherUser != User.Identity.Name)
-                    list.AddRange(_messageService.FindAllByUsername(otherUser, User.Identity.Name).Result);
+                    list.AddRange(await _messageService.FindAllByUsername(otherUser, User.Identity.Name));
                 return list.OrderByDescending(m => m.TimeSent).ToList();
             }
 
-            var listunseen = _messageService.FindUnSeenByUsername(User.Identity.Name, otherUser).Result;
+            var listunseen = await _messageService.FindUnSeenByUsername(User.Identity.Name, otherUser);
             if (otherUser != User.Identity.Name)
-                listunseen.AddRange(_messageService.FindUnSeenByUsername(otherUser, User.Identity.Name).Result);
+                listunseen.AddRange(await _messageService.FindUnSeenByUsername(otherUser, User.Identity.Name));
             return listunseen.OrderByDescending(m => m.TimeSent).ToList();
         }
 
@@ -66,8 +66,8 @@ namespace IngatlanApi.Controllers {
         /// <returns>A kért üzenet</returns>
         [Authorize]
         [HttpGet("{id:length(24)}")]
-        public Message Get(string id) {
-            return _messageService.FindById(id).Result;
+        public async Task<Message> Get(string id) {
+            return await _messageService.FindById(id);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace IngatlanApi.Controllers {
                 return NotFound();
 
             var username = User.Identity.Name;
-            var message = _messageService.AddMessage(username, toUser.UserName, text).Result;
+            var message = await _messageService.AddMessage(username, toUser.UserName, text);
 
             return message;
         }
@@ -98,13 +98,13 @@ namespace IngatlanApi.Controllers {
         [Route("/api/[controller]/setseen")]
         [Authorize]
         [HttpPatch]
-        public ActionResult<Message> SetSeen([FromQuery]string id) {
-            var message = Get(id);
+        public async Task<ActionResult<Message>> SetSeen([FromQuery]string id) {
+            var message = await Get(id);
 
             if (message == null)
                 return NotFound();
 
-            return _messageService.SetSeen(message.Id).Result;
+            return await _messageService.SetSeen(message.Id);
         }
     }
 }

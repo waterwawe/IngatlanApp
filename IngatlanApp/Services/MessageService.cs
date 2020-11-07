@@ -84,7 +84,7 @@ namespace IngatlanApi.Services {
         }
 
         public async Task<Message> SetSeen(string id) {
-            var message = FindById(id).Result;
+            var message = await FindById(id);
 
             message.IsSeen = true;
 
