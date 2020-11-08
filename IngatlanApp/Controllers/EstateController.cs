@@ -20,15 +20,15 @@ namespace IngatlanApi.Controllers {
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class IngatlanController : ControllerBase {
+    public class EstateController : ControllerBase {
 
         private readonly IHostEnvironment _environment;
-        private readonly IngatlanService _ingatlanService;
+        private readonly EstateService _ingatlanService;
         private readonly UserService userService;
         private readonly ViewService _viewService;
         private IHttpContextAccessor _accessor;
 
-        public IngatlanController(IHostEnvironment env, IngatlanService ingatlanService, UserService userService, ViewService viewService, IHttpContextAccessor accessor) {
+        public EstateController(IHostEnvironment env, EstateService ingatlanService, UserService userService, ViewService viewService, IHttpContextAccessor accessor) {
             _ingatlanService = ingatlanService;
             this.userService = userService;
             _environment = env;
@@ -242,7 +242,7 @@ namespace IngatlanApi.Controllers {
             if (view == null)
                 view = await _viewService.AddView(ingatlan.Id);
 
-            if (!view.ViewedByUsernameList.Contains(_accessor.HttpContext.Connection.RemoteIpAddress.ToString()))
+            if (!view.ViewedByIpList.Contains(_accessor.HttpContext.Connection.RemoteIpAddress.ToString()))
                 await _viewService.AddUser(ingatlan.Id, _accessor.HttpContext.Connection.RemoteIpAddress.ToString());
 
             return ingatlan;
@@ -270,7 +270,7 @@ namespace IngatlanApi.Controllers {
             if (viewList == null)
                 return Ok(new { views = 0 });
 
-            return Ok(new { views = viewList.ViewedByUsernameList.Count });
+            return Ok(new { views = viewList.ViewedByIpList.Count });
         }
 
         /// <summary>

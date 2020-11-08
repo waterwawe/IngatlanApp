@@ -15,6 +15,6 @@ namespace IngatlanApi.Models {
         [BsonRequired]
         [BsonRepresentation(BsonType.ObjectId)]
         public string EstateId { get; set; }
-        public List<string> ViewedByUsernameList { get; set; }
+        public List<string> ViewedByIpList { get; set; }
     }
 }

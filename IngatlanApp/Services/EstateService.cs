@@ -10,11 +10,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace IngatlanApi.Services {
-    public class IngatlanService {
+    public class EstateService {
 
         private readonly IMongoCollection<Estate> _ingatlanok;
 
-        public IngatlanService(IIngatlanDatabaseSettings settings) {
+        public EstateService(IIngatlanDatabaseSettings settings) {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 

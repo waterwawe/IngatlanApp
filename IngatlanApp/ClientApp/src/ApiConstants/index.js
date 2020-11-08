@@ -1,4 +1,4 @@
-export const ApiCallItem = "/api/ingatlan";
+export const ApiCallItem = "/api/estate";
 export const ApiCallAccount = "/account";
 export const ApiCallReview = "/api/review";
 export const ApiCallImage = "/api/image";

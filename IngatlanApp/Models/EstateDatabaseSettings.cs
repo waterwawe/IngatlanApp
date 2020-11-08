@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace IngatlanApi.Models {
-    public class IngatlanDatabaseSettings : IIngatlanDatabaseSettings {
+    public class EstateDatabaseSettings : IIngatlanDatabaseSettings {
         public string IngatlanCollectionName { get; set; }
         public string UserCollectionName { get; set; }
         public string ReviewCollectionName { get; set; }

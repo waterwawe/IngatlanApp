@@ -30,8 +30,8 @@ namespace IngatlanApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<IngatlanDatabaseSettings>(
-       Configuration.GetSection(nameof(IngatlanDatabaseSettings)));
+            services.Configure<EstateDatabaseSettings>(
+       Configuration.GetSection(nameof(EstateDatabaseSettings)));
 
             var mongoDbIdentityConfiguration = new MongoDbIdentityConfiguration
             {
@@ -60,9 +60,9 @@ namespace IngatlanApp
             services.ConfigureMongoDbIdentity<ApplicationUser, ApplicationRole, Guid>(mongoDbIdentityConfiguration);
 
             services.AddSingleton<IIngatlanDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<IngatlanDatabaseSettings>>().Value);
+                sp.GetRequiredService<IOptions<EstateDatabaseSettings>>().Value);
 
-            services.AddSingleton<IngatlanService>();
+            services.AddSingleton<EstateService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<ReviewService>();
             services.AddSingleton<ViewService>();

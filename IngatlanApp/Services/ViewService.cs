@@ -24,14 +24,14 @@ namespace IngatlanApi.Services {
         public async Task<View> AddView(string ingatlanId) {
             var view = new View();
             view.EstateId = ingatlanId;
-            view.ViewedByUsernameList = new List<string>();
+            view.ViewedByIpList = new List<string>();
             await _views.InsertOneAsync(view);
             return view;
         }
 
         public async Task<View> AddUser(string ingatlanId, string username) {
             var view = await FindByIngatlanId(ingatlanId);
-            view.ViewedByUsernameList.Add(username);
+            view.ViewedByIpList.Add(username);
             await _views.ReplaceOneAsync(v=> v.Id == view.Id,view);
             return view;
         }
