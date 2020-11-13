@@ -10,8 +10,8 @@ export const getEstateById = async (id) => {
   });
 }
 
-export const getEstates = async (queryobj) => {
-  return await fetch(`${ApiCallItem}/?${serialize(queryobj)}`, {
+export const getEstates = async (queryobject) => {
+  return await fetch(`${ApiCallItem}/?${serialize(queryobject)}`, {
     method: 'GET',
     credentials: 'include',
     headers: {
