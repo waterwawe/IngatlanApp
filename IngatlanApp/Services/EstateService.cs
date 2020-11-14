@@ -55,8 +55,8 @@ namespace IngatlanApi.Services {
                 }
             }
 
-            if (queryDTO.IngatlanType.Length > 0) {
-                typefilter = Builders<Estate>.Filter.In(x => x.IngatlanType, queryDTO.IngatlanType);
+            if (queryDTO.EstateType.Length > 0) {
+                typefilter = Builders<Estate>.Filter.In(x => x.EstateType, queryDTO.EstateType);
                 combinefilter = Builders<Estate>.Filter.And(combinefilter, typefilter);
             }
 

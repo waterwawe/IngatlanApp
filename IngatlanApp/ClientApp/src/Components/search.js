@@ -87,7 +87,7 @@ export default function Search() {
       queryObject.district = district;
 
     if (types)
-      queryObject.estatetype = types;
+      queryObject.estateType = types;
 
     if (priceFrom)
       queryObject.priceFrom = priceFrom;
@@ -134,8 +134,8 @@ export default function Search() {
 
   return (
     <div className="d-flex justify-content-center">
-      <Card className="col-md-11 col-lg-9" bg="light" variant="light">
-        <Card bg="light" variant="light">
+      <Card className="col-md-11 col-lg-9 mt-2" bg="light" variant="light">
+        <Card className="mt-2" bg="light" variant="light">
           <ListGroup horizontal className="search-form">
             <ListGroup.Item className="search-from-element col-sm-11 col-md-5 col-lg-4 col-xl-3">
               <Form.Group>

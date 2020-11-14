@@ -59,7 +59,7 @@
             </summary>
             <param name="priceFrom">Ennél az értéknél olcsóbb ingatlanok szűrve lesznek.</param>
             <param name="priceTo">Ennél az értéknél drágább ingatlanok szűrve lesznek.</param>
-            <param name="ingatlanType">Adott típusú ingatlanok listázása, több is megadható tömbként</param>
+            <param name="estateType">Adott típusú ingatlanok listázása, több is megadható tömbként</param>
             <param name="city">Csak egy bizonyos városban lévő ingatlanok listázása</param>
             <param name="advertisementType">Ingatlan hirdetés típusa</param>
             <param name="district">Csak egy bizonyos kerületben lévő ingatlanok listázása</param>
@@ -303,7 +303,7 @@
             Ennél drágább ingatlanok szűrve lesznek
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.DTO.QueryDTO.IngatlanType">
+        <member name="P:IngatlanApi.Models.DTO.QueryDTO.EstateType">
             <summary>
             Szűrés ingatlan típusra, több is szerepelhet
             </summary>
@@ -403,7 +403,7 @@
             Ingatlan ára
             </summary>
         </member>
-        <member name="P:IngatlanApi.Models.Estate.IngatlanType">
+        <member name="P:IngatlanApi.Models.Estate.EstateType">
             <summary>
             Ingatlan típusa 1-Családi ház 2-Ikerház 3-Lakás 4-Penthouse 5-Farm
             </summary>

@@ -41,7 +41,7 @@ namespace IngatlanApi.Controllers {
         /// </summary>
         /// <param name="priceFrom">Ennél az értéknél olcsóbb ingatlanok szűrve lesznek.</param>
         /// <param name="priceTo">Ennél az értéknél drágább ingatlanok szűrve lesznek.</param>
-        /// <param name="ingatlanType">Adott típusú ingatlanok listázása, több is megadható tömbként</param>
+        /// <param name="estateType">Adott típusú ingatlanok listázása, több is megadható tömbként</param>
         /// <param name="city">Csak egy bizonyos városban lévő ingatlanok listázása</param>
         /// <param name="advertisementType">Ingatlan hirdetés típusa</param>
         /// <param name="district">Csak egy bizonyos kerületben lévő ingatlanok listázása</param>
@@ -54,7 +54,7 @@ namespace IngatlanApi.Controllers {
         public async Task<ActionResult<List<Estate>>> Get(
             [FromQuery] double priceFrom,
             [FromQuery] double priceTo,
-            [FromQuery] IngatlanType[] ingatlanType,
+            [FromQuery] IngatlanType[] estateType,
             [FromQuery] string city,
             [FromQuery] int district,
             [FromQuery] AdvertisementType advertisementType,
@@ -67,7 +67,7 @@ namespace IngatlanApi.Controllers {
                     StreetName = streetname,
                     District = district
                 },
-                IngatlanType = ingatlanType,
+                EstateType = estateType,
                 AdvertisementType = advertisementType,
                 PriceFrom = priceFrom,
                 PriceTo = priceTo,

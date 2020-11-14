@@ -34,7 +34,7 @@ export const estatetypes = (value) => {
         case 5:
             return "Farm"
         default:
-          return "Unkown"
+          return "Unknown"
       }
 }
 export const Streettypes = (value) => {

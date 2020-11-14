@@ -39,7 +39,7 @@ export default function Login({ isLoggedin, signIn }) {
                 <Card.Body>
                     <Alert variant="danger" show={failed}>
                         Invalid username or password
-        </Alert>
+                    </Alert>
                     <form onSubmit={handleSubmit}>
                         <Form.Group role="form">
                             <Form.Label>Username</Form.Label>
@@ -47,7 +47,7 @@ export default function Login({ isLoggedin, signIn }) {
                             <Link to="/register">
                                 <Form.Text className="text-muted">
                                     Don't have an account? Click here to register
-    </Form.Text>
+                                </Form.Text>
                             </Link>
                         </Form.Group>
 

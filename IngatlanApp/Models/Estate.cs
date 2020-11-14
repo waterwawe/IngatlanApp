@@ -56,7 +56,7 @@ namespace IngatlanApi.Models {
         /// Ingatlan típusa 1-Családi ház 2-Ikerház 3-Lakás 4-Penthouse 5-Farm
         /// </summary>
         [BsonRequired]
-        public IngatlanType IngatlanType { get; set; }
+        public IngatlanType EstateType { get; set; }
 
         /// <summary>
         /// Hirdető felhasználóneve

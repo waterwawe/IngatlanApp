@@ -29,7 +29,7 @@ namespace IngatlanApi.Models.DTO {
         /// <summary>
         /// Szűrés ingatlan típusra, több is szerepelhet
         /// </summary>
-        public IngatlanType[] IngatlanType { get; set; }
+        public IngatlanType[] EstateType { get; set; }
 
         /// <summary>
         /// Szűrés egy adott hirdető ingatlanjaira
