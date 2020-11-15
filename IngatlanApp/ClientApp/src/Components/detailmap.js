@@ -10,25 +10,11 @@ const mapStyles = {
 var count = 0;
 
 export function MapContainer({ estates, google, center }) {
-  const [activeMarker, setActiveMarker] = useState();
   let history = useHistory();
 
   const onMarkerClick = (id) => {
     history.push(`/estate/${id}`)
   };
-
-  const onClose = () => {
-    setActiveMarker(null);
-  }
-
-
-  function titleCase(str) {
-    var splitStr = str.toLowerCase().split(' ');
-    for (var i = 0; i < splitStr.length; i++) {
-      splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-    }
-    return splitStr.join(' ');
-  }
 
   function romanize(num) {
     if (isNaN(num))
