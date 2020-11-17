@@ -29,6 +29,9 @@ export default function Chat({ otherUser }) {
 
     const send = async (event) => {
         event.preventDefault();
+        if(message.length <= 0){
+            return;
+        }
         const response = await postMessage(otherUser, message);
         if (response.ok) {
             getMessages();

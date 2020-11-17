@@ -17,7 +17,7 @@ export default function ProfileDetail({ isSignedin, userName, match }) {
     const [isLoading, setLoading] = useState(false);
     const [isFormLoading, setFormLoading] = useState(false);
     const [type, setType] = useState(0);
-    const [revComment, setRevComment] = useState();
+    const [revComment, setRevComment] = useState("");
     const [succes, setSuccess] = useState(false);
     const [doneProfile, setDoneProfile] = useState(false);
 
@@ -29,6 +29,11 @@ export default function ProfileDetail({ isSignedin, userName, match }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setFormLoading(true);
+
+        if (revComment.length <= 0) {
+            setFormLoading(false);
+            return;
+        }
 
         let review = {
             toUserName: match.params.username,
