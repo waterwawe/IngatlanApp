@@ -22,8 +22,9 @@ export default function Login({ isLoggedin, signIn }) {
         if (ok) {
             setFailed(false);
         }
-        else
+        else {
             setFailed(true);
+        }
 
         setLoading(false);
     }
@@ -42,7 +43,7 @@ export default function Login({ isLoggedin, signIn }) {
                     </Alert>
                     <form onSubmit={handleSubmit}>
                         <Form.Group role="form">
-                            <Form.Label>Username</Form.Label>
+                            <Form.Label>E-Mail</Form.Label>
                             <Form.Control isInvalid={email.length <= 0 && !(email.includes("@") && email.includes("."))} isValid={email.length > 0 && email.includes("@") && email.includes(".")} type="emailaddress" placeholder="Enter e-mail address" value={email} onChange={e => { setEmail(e.target.value) }} />
                             <Link to="/register">
                                 <Form.Text className="text-muted">
