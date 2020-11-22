@@ -94,11 +94,11 @@ export default function Details({ match }) {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Container className="mt-2 mb-2 text-center col-sm-11 col-md-10 col-lg-8">
+      <Container className="mt-2 mb-2 col-sm-11 col-md-10 col-lg-8">
         <Card className="estate-detail-card" bg="light">
-          <Card.Body className="text-center mt-2">
+          <Card.Body className="mt-2">
             <Card.Title>{details.title}</Card.Title>
-            <Carousel className="detail-image-carousel col-sm-11 col-md-10 col-lg-8">
+            <Carousel className="detail-image-carousel d-flex justify-content-center col-sm-11 col-md-10 col-lg-8 border-0">
               {details.images ? images.map((img) => {
                 return (<Carousel.Item key={img}>
                   <Image
