@@ -65,8 +65,8 @@ export default function EstateThumbnail({ estate }) {
                         <Row><b>Price: <span> &nbsp; </span></b> {estate.price} {estate.advertisementType === 1 ? "M Ft." : estate.advertisementType === 2 ? "Ft. / month" : "Ft. / day"}</Row>
                     </ListGroup.Item>
                     <ListGroup.Item className="col-sm-3 col-md-3 col-lg-3">
-                        <Link to={`/estate/${estate.id}`}><Button className="estate-list-button" variant="primary">Read more</Button></Link>
-                        <Link to={`/profile/${estate.ownerUsername}`}><Button className="estate-list-button" variant="primary">Owner's profile</Button></Link>
+                        <Link to={`/estate/${estate.id}`}><Button className="estate-list-button col-9" variant="primary">Read more</Button></Link>
+                        <Link to={`/profile/${estate.ownerUsername}`}><Button className="estate-list-button col-9" variant="primary">Owner's profile</Button></Link>
                     </ListGroup.Item>
                 </ListGroup>
             </Card.Body>
