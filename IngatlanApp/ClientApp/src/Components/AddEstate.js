@@ -119,7 +119,7 @@ export default function Addestate({ isLoggedIn }) {
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <Form.Label>Is your estate for sale or for rent</Form.Label>
-                                    <Row><Form.Control as="select" value={adType} onChange={e => { setTouched(true); setAdType(e.target.value) }}>
+                                    <Row><Form.Control as="select" className="m-3" value={adType} onChange={e => { setTouched(true); setAdType(e.target.value) }}>
                                         <option value="0">Select one</option>
                                         <option value="1">{AdvertisementTypes(1)}</option>
                                         <option value="2">{AdvertisementTypes(2)}</option>
