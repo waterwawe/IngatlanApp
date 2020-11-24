@@ -170,7 +170,7 @@ export default function Edit({ match }) {
   const getImages = async (imgarray) => {
     let imgtemp = [];
     imgarray.map(async (image) => {
-     await getImage(image)
+      await getImage(image)
         .then(imgs => {
           imgtemp = imgtemp.concat({ name: image, url: URL.createObjectURL(imgs) });
           setImages(imgtemp);
@@ -197,7 +197,7 @@ export default function Edit({ match }) {
     estate.price = parseFloat(price);
     estate.description = description;
 
-    await updateEstate(match.params.id,estate);
+    await updateEstate(match.params.id, estate);
     setLoading(false);
 
   }
@@ -286,7 +286,7 @@ export default function Edit({ match }) {
             <Modal.Header closeButton>
               <Modal.Title>Highlight your advertisement</Modal.Title>
             </Modal.Header>
-            <Modal.Body>What time would you want to highlight your ad?
+            <Modal.Body>What time would you like to highlight your ad?
               <Row className="mt-2 mb-2">
                 <Button className="ml-2 mr-2" onClick={e => { highlight(0); }}>Highlight for a day</Button> - 25 Credits
               </Row>
@@ -303,7 +303,7 @@ export default function Edit({ match }) {
               </Button>
             </Modal.Footer>
           </Modal>
-          <Card className="margin-10px">
+          <Card className="mt-2">
             <Card.Title>Upload a new photo or delete existing ones</Card.Title>
             <Card.Body>
               <Row className="edit-images">
@@ -316,7 +316,7 @@ export default function Edit({ match }) {
                   </Card>)
                 })}
               </Row>
-              <Row>
+              <Row className="mt-2">
                 <form onSubmit={uploadImage} className="upload-image">
                   <Form.Group role="form">
                     <input type="file" accept=".jpg,.gif,.png" onChange={e => { setFile(e.target.files[0]) }} />
