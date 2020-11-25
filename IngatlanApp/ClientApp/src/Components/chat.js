@@ -49,7 +49,7 @@ export default function Chat({ otherUser }) {
                 Messages with {otherUser}
             </Card.Title>
             <Card.Body>
-                <Card>
+                <Card classname="mb-2">
                     <Card.Title>
                         Send a new message
                     </Card.Title>
